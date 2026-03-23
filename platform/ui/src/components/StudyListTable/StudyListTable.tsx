@@ -7,7 +7,7 @@ const StudyListTable = ({ tableDataSource, querying }) => {
   return (
     <div className="bg-black">
       <div className="container relative m-auto">
-        <table className="w-full text-white">
+        <table className="w-full border-collapse text-white">
           <tbody
             data-cy="study-list-results"
             data-querying={querying}

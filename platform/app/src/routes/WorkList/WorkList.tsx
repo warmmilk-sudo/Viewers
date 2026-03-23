@@ -77,9 +77,11 @@ function WorkList({
     // in the URL, load the page and have it apply.
     clearOnUnload: true,
   });
+  const { accession: _ignoredAccession, accessControlID: _ignoredAccessControlID, ...sanitizedSessionQueryFilterValues } =
+    sessionQueryFilterValues || {};
   const [filterValues, _setFilterValues] = useState({
     ...defaultFilterValues,
-    ...sessionQueryFilterValues,
+    ...sanitizedSessionQueryFilterValues,
   });
 
   const debouncedFilterValues = useDebounce(filterValues, 200);
@@ -90,7 +92,21 @@ function WorkList({
    * Only applied if no other sorting is specified and there are less than 101 studies
    */
 
-  const canSort = studiesTotal < STUDIES_LIMIT;
+  const studiesForDisplay = useMemo(() => {
+    const selectedAccessControlIDs = Array.isArray(filterValues.accessControlID)
+      ? filterValues.accessControlID.filter(Boolean)
+      : filterValues.accessControlID
+      ? [filterValues.accessControlID]
+      : [];
+
+    if (!selectedAccessControlIDs.length) {
+      return studies;
+    }
+
+    return studies.filter(study => selectedAccessControlIDs.includes(study.accessControlID));
+  }, [studies, filterValues.accessControlID]);
+
+  const canSort = studiesForDisplay.length < STUDIES_LIMIT;
   const shouldUseDefaultSort = sortBy === '' || !sortBy;
   const sortModifier = sortDirection === 'descending' ? 1 : -1;
   const defaultSortValues =
@@ -99,10 +115,10 @@ function WorkList({
 
   const sortedStudies = useMemo(() => {
     if (!canSort) {
-      return studies;
+      return studiesForDisplay;
     }
 
-    return [...studies].sort((s1, s2) => {
+    return [...studiesForDisplay].sort((s1, s2) => {
       if (shouldUseDefaultSort) {
         const ascendingSortModifier = -1;
         return _sortStringDates(s1, s2, ascendingSortModifier);
@@ -125,12 +141,12 @@ function WorkList({
 
       return 0;
     });
-  }, [canSort, studies, shouldUseDefaultSort, sortBy, sortModifier]);
+  }, [canSort, studiesForDisplay, shouldUseDefaultSort, sortBy, sortModifier]);
 
   // ~ Rows & Studies
   const [expandedRows, setExpandedRows] = useState([]);
   const [studiesWithSeriesData, setStudiesWithSeriesData] = useState([]);
-  const numOfStudies = studiesTotal;
+  const numOfStudies = studiesForDisplay.length;
   const querying = useMemo(() => {
     return isLoadingData || expandedRows.length > 0;
   }, [isLoadingData, expandedRows]);
@@ -193,8 +209,10 @@ function WorkList({
         if (currValue.endDate && defaultValue.endDate !== currValue.endDate) {
           queryString.endDate = currValue.endDate;
         }
-      } else if (key === 'modalities' && currValue.length) {
-        queryString.modalities = currValue.join(',');
+      } else if (key === 'modalities' || key === 'accessControlID') {
+        if (Array.isArray(currValue) && currValue.length) {
+          queryString[key] = currValue.join(',');
+        }
       } else if (currValue !== defaultValue) {
         queryString[key] = currValue;
       }
@@ -255,7 +273,6 @@ function WorkList({
     const isExpanded = expandedRows.some(k => k === rowKey);
     const {
       studyInstanceUid,
-      accession,
       modalities,
       instances,
       description,
@@ -328,11 +345,6 @@ function WorkList({
           key: 'modality',
           content: modalities,
           title: modalities,
-          gridCol: 3,
-        },
-        {
-          key: 'accession',
-          content: makeCopyTooltipCell(accession),
           gridCol: 3,
         },
         {
@@ -437,7 +449,7 @@ function WorkList({
                     {/* TODO revisit the completely rounded style of buttons used for launching a mode from the worklist later */}
                     <Button
                       type={ButtonEnums.type.primary}
-                      size={ButtonEnums.size.smallTall}
+                      size={ButtonEnums.size.small}
                       disabled={!isValidMode}
                       startIconTooltip={
                         !isValidMode ? (
@@ -455,7 +467,7 @@ function WorkList({
                       }
                       onClick={() => {}}
                       dataCY={`mode-${mode.routeName}-${studyInstanceUid}`}
-                      className={!isValidMode && 'bg-[#222d44]'}
+                      className={isValidMode ? undefined : 'bg-[#222d44]'}
                     >
                       {mode.displayName}
                     </Button>
@@ -631,7 +643,7 @@ const defaultFilterValues = {
   },
   description: '',
   modalities: [],
-  accession: '',
+  accessControlID: [],
   sortBy: '',
   sortDirection: 'none',
   pageNumber: 1,
@@ -665,7 +677,7 @@ function _getQueryFilterValues(params) {
     },
     description: params.get('description'),
     modalities: params.get('modalities') ? params.get('modalities').split(',') : [],
-    accession: params.get('accession'),
+    accessControlID: params.get('accesscontrolid') ? params.get('accesscontrolid').split(',') : [],
     sortBy: params.get('sortby'),
     sortDirection: params.get('sortdirection'),
     pageNumber: _tryParseInt(params.get('pagenumber'), undefined),

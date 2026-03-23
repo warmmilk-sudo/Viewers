@@ -14,7 +14,7 @@ const StudyListTableRow = props => {
         data-cy={dataCY}
       >
         <td
-          className={classnames('border-0 p-0', {
+          className={classnames('border-0 p-0 align-top', {
             'border-secondary-light bg-primary-dark border-b': isExpanded,
           })}
         >
@@ -30,61 +30,44 @@ const StudyListTableRow = props => {
               }
             )}
           >
-            <table className={classnames('w-full p-4')}>
-              <tbody>
-                <tr
-                  className={classnames(
-                    'hover:bg-secondary-main cursor-pointer transition duration-300',
-                    {
-                      'bg-primary-dark': !isExpanded,
-                    },
-                    { 'bg-secondary-dark': isExpanded }
-                  )}
-                  onClick={onClickRow}
-                  data-cy={clickableCY}
-                >
-                  {row.map((cell, index) => {
-                    const { content, title, gridCol } = cell;
-                    return (
-                      <td
-                        key={index}
-                        className={classnames(
-                          'truncate px-4 py-2 text-base',
-                          { 'border-secondary-light border-b': !isExpanded },
-                          getGridWidthClass(gridCol) || ''
+            <div
+              className={classnames(
+                'flex w-full cursor-pointer flex-row transition duration-300',
+                {
+                  'bg-primary-dark hover:bg-secondary-main': !isExpanded,
+                },
+                { 'bg-secondary-dark': isExpanded }
+              )}
+              onClick={onClickRow}
+              data-cy={clickableCY}
+            >
+              {row.map((cell, index) => {
+                const { content, title, gridCol } = cell;
+                return (
+                  <div
+                    key={index}
+                    className={classnames(
+                      'flex min-w-0 items-center px-4 py-2 text-base',
+                      { 'border-secondary-light border-b': !isExpanded },
+                      getGridWidthClass(gridCol) || ''
+                    )}
+                    title={title}
+                  >
+                    {index === 0 && (
+                      <div className="mr-4 shrink-0">
+                        {isExpanded ? (
+                          <Icons.ChevronOpen className="-mt-1 inline-flex" />
+                        ) : (
+                          <Icons.ChevronClosed className="-mt-1 inline-flex rotate-180" />
                         )}
-                        style={{
-                          maxWidth: 0,
-                        }}
-                        title={title}
-                      >
-                        <div className="flex">
-                          {index === 0 && (
-                            <div>
-                              {isExpanded ? (
-                                <Icons.ChevronOpen className="-mt-1 mr-4 inline-flex" />
-                              ) : (
-                                <Icons.ChevronClosed className="-mt-1 mr-4 inline-flex rotate-180" />
-                              )}
-                            </div>
-                          )}
-                          <div
-                            className={classnames({ 'overflow-hidden': true }, { truncate: true })}
-                          >
-                            {content}
-                          </div>
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-                {isExpanded && (
-                  <tr className="max-h-0 w-full select-text overflow-hidden bg-black">
-                    <td colSpan={row.length}>{expandedContent}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                      </div>
+                    )}
+                    <div className="min-w-0 truncate">{content}</div>
+                  </div>
+                );
+              })}
+            </div>
+            {isExpanded && <div className="w-full select-text bg-black">{expandedContent}</div>}
           </div>
         </td>
       </tr>

@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import LegacyButton from '../LegacyButton';
 import Typography from '../Typography';
 import InputGroup from '../InputGroup';
 import { Icons } from '@ohif/ui-next';
+
+const ACCESS_CONTROL_OPTIONS = [
+  { value: 'CRYOABLATION', label: 'CRYOABLATION' },
+  { value: 'CHEST_CT', label: 'CHEST_CT' },
+  { value: 'PULMONARY_NODULES', label: 'PULMONARY_NODULES' },
+];
 
 const StudyListFilter = ({
   filtersMeta,
@@ -27,6 +34,50 @@ const StudyListFilter = ({
     });
   };
   const isSortingEnabled = numOfStudies > 0 && numOfStudies <= 100;
+
+  const accessControlValue = Array.isArray(filterValues.accessControlID)
+    ? filterValues.accessControlID.filter(Boolean)
+    : [];
+  const [isAccessControlOpen, setIsAccessControlOpen] = useState(false);
+  const accessControlPopoverRef = useRef(null);
+
+  useEffect(() => {
+    const handlePointerDown = event => {
+      if (!accessControlPopoverRef.current) {
+        return;
+      }
+
+      if (!accessControlPopoverRef.current.contains(event.target)) {
+        setIsAccessControlOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    return () => document.removeEventListener('mousedown', handlePointerDown);
+  }, []);
+
+  const accessControlLabels = accessControlValue
+    .map(value => ACCESS_CONTROL_OPTIONS.find(option => option.value === value)?.label || value)
+    .filter(Boolean);
+
+  const handleAccessControlChange = newValues => {
+    onChange({
+      ...filterValues,
+      accessControlID: Array.isArray(newValues) ? newValues : [],
+    });
+  };
+
+  const toggleAccessControlValue = value => {
+    const nextValues = accessControlValue.includes(value)
+      ? accessControlValue.filter(selectedValue => selectedValue !== value)
+      : [...accessControlValue, value];
+
+    handleAccessControlChange(nextValues);
+  };
+
+  const clearAccessControlValues = () => {
+    handleAccessControlChange([]);
+  };
 
   return (
     <React.Fragment>
@@ -53,7 +104,6 @@ const StudyListFilter = ({
                 )}
               </div>
               <div className="flex h-[34px] flex-row items-center">
-                {/* TODO revisit the completely rounded style of button used for clearing the study list filter - for now use LegacyButton*/}
                 {isFiltering && (
                   <LegacyButton
                     rounded="full"
@@ -84,10 +134,131 @@ const StudyListFilter = ({
               </div>
             </div>
           </div>
+
+          <div className="container relative mx-auto px-4 pb-4">
+            <div className="flex items-start gap-4">
+              <Typography
+                variant="h6"
+                className="pt-2 text-white"
+              >
+                {'分类标签'}
+              </Typography>
+
+              <div
+                ref={accessControlPopoverRef}
+                className="relative"
+              >
+                <button
+                  type="button"
+                  className={classnames(
+                    'flex h-10 w-[340px] max-w-full items-center justify-between gap-3 rounded border px-4 text-left text-sm transition focus:outline-none',
+                    isAccessControlOpen
+                      ? 'border-primary-light bg-secondary-dark'
+                      : 'border-primary-active bg-black hover:border-primary-light'
+                  )}
+                  onClick={() => setIsAccessControlOpen(open => !open)}
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
+                    {accessControlLabels.length ? (
+                      <>
+                        {accessControlLabels.slice(0, 2).map(label => (
+                          <span
+                            key={label}
+                            className="inline-flex max-w-[120px] items-center rounded-full bg-primary-main/20 px-2 py-1 text-xs font-medium text-primary-light"
+                          >
+                            <span className="truncate">{label}</span>
+                          </span>
+                        ))}
+                        {accessControlLabels.length > 2 && (
+                          <span className="inline-flex items-center rounded-full border border-primary-active/60 px-2 py-1 text-xs text-primary-light">
+                            +{accessControlLabels.length - 2}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="truncate text-secondary-light">请选择分类标签</span>
+                    )}
+                  </div>
+                  <Icons.ChevronDown
+                    className={classnames('h-4 w-4 shrink-0 transition-transform', {
+                      'rotate-180': isAccessControlOpen,
+                    })}
+                  />
+                </button>
+
+                {isAccessControlOpen && (
+                  <div className="absolute left-0 top-full z-50 mt-2 w-[360px] rounded border border-primary-active bg-black p-3 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <Typography
+                        variant="h6"
+                        className="text-base text-white"
+                      >
+                        分类标签
+                      </Typography>
+                      <button
+                        type="button"
+                        className="text-primary-light text-sm hover:underline"
+                        onClick={clearAccessControlValues}
+                      >
+                        清空
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      {ACCESS_CONTROL_OPTIONS.map(option => {
+                        const isSelected = accessControlValue.includes(option.value);
+
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            className={classnames(
+                              'flex w-full items-center gap-3 rounded px-2 py-2 text-left transition',
+                              isSelected
+                                ? 'bg-primary-main/15 text-white'
+                                : 'text-secondary-light hover:bg-secondary-dark/50 hover:text-white'
+                            )}
+                            onClick={() => toggleAccessControlValue(option.value)}
+                          >
+                            <span
+                              className={classnames(
+                                'flex h-4 w-4 items-center justify-center rounded border',
+                                isSelected
+                                  ? 'border-primary-active bg-primary-active text-black'
+                                  : 'border-secondary-light'
+                              )}
+                            >
+                              {isSelected ? (
+                                <Icons.ByName name="checkbox-active" />
+                              ) : (
+                                <Icons.ByName name="checkbox-default" />
+                              )}
+                            </span>
+                            <span className="flex-1">{option.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between border-t border-secondary-light pt-3">
+                      <span className="text-xs text-secondary-light">{accessControlLabels.length} 已选</span>
+                      <button
+                        type="button"
+                        className="text-primary-light text-sm hover:underline"
+                        onClick={() => setIsAccessControlOpen(false)}
+                      >
+                        完成
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="sticky -top-1 z-10 mx-auto border-b-4 border-black">
-        <div className="bg-primary-dark pt-3 pb-3">
+      <div className="sticky -top-1 z-10 w-full border-b-4 border-black bg-black">
+        <div className="container relative m-auto bg-primary-dark pt-3 pb-3">
           <InputGroup
             inputMeta={filtersMeta}
             values={filterValues}
@@ -114,16 +285,11 @@ const StudyListFilter = ({
 StudyListFilter.propTypes = {
   filtersMeta: PropTypes.arrayOf(
     PropTypes.shape({
-      /** Identifier used to map a field to it's value in `filterValues` */
       name: PropTypes.string.isRequired,
-      /** Friendly label for filter field */
       displayName: PropTypes.string.isRequired,
-      /** One of the supported filter field input types */
       inputType: PropTypes.oneOf(['Text', 'MultiSelect', 'DateRange', 'None']).isRequired,
       isSortable: PropTypes.bool.isRequired,
-      /** Size of filter field in a 12-grid system */
       gridCol: PropTypes.oneOf([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).isRequired,
-      /** Options for a "MultiSelect" inputType */
       option: PropTypes.arrayOf(
         PropTypes.shape({
           value: PropTypes.string,

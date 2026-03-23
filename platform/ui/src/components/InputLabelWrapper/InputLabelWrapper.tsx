@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Icons } from '@ohif/ui-next';
 
-const baseLabelClassName = 'flex flex-col flex-1 text-white text-lg pl-1 select-none';
+const baseLabelClassName = 'flex flex-col flex-1 text-white text-lg select-none';
 const spanClassName = 'flex flex-row items-center cursor-pointer focus:outline-none';
 
 const sortIconMap = {
@@ -20,12 +20,23 @@ const InputLabelWrapper = ({
   className = '',
   children,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const onClickHandler = e => {
-    if (!isSortable) {
+    if (isSortable) {
+      onLabelClick(e);
+    }
+
+    setIsExpanded(true);
+  };
+
+  const onKeyDownHandler = e => {
+    if (e.key !== 'Enter' && e.key !== ' ') {
       return;
     }
 
-    onLabelClick(e);
+    e.preventDefault();
+    onClickHandler(e);
   };
 
   return (
@@ -34,13 +45,13 @@ const InputLabelWrapper = ({
         role="button"
         className={spanClassName}
         onClick={onClickHandler}
-        onKeyDown={onClickHandler}
+        onKeyDown={onKeyDownHandler}
         tabIndex="0"
       >
         {label}
         {isSortable && sortIconMap[sortDirection]()}
       </span>
-      <span>{children}</span>
+      {isExpanded ? <span>{children}</span> : null}
     </label>
   );
 };

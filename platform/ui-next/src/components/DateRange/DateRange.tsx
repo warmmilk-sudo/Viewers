@@ -87,7 +87,7 @@ export function DatePickerWithRange({
             <input
               id={`${id}-start`}
               type="text"
-              placeholder={t('Start Date', 'Start date')}
+              placeholder=""
               autoComplete="off"
               value={start}
               onChange={e => handleInputChange(e, 'start')}
@@ -124,7 +124,7 @@ export function DatePickerWithRange({
             <input
               id={`${id}-end`}
               type="text"
-              placeholder={t('End Date', 'End date')}
+              placeholder=""
               autoComplete="off"
               value={end}
               onChange={e => handleInputChange(e, 'end')}

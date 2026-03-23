@@ -1,4 +1,5 @@
 import dicomImageLoader from '@cornerstonejs/dicom-image-loader';
+import dcmjs from 'dcmjs';
 
 import { PubSubService } from '@ohif/core';
 
@@ -38,16 +39,19 @@ export default class DicomFileUploader extends PubSubService {
   private _file;
   private _fileId;
   private _dataSource;
+  private _accessControlID: string;
+  private _studyInstanceUID: string = '';
   private _loadPromise;
   private _abortController = new AbortController();
   private _status: UploadStatus = UploadStatus.NotStarted;
   private _percentComplete = 0;
 
-  constructor(file, dataSource) {
+  constructor(file, dataSource, accessControlID = '') {
     super(EVENTS);
     this._file = file;
     this._fileId = dicomImageLoader.wadouri.fileManager.add(file);
     this._dataSource = dataSource;
+    this._accessControlID = accessControlID;
   }
 
   getFileId(): string {
@@ -60,6 +64,10 @@ export default class DicomFileUploader extends PubSubService {
 
   getFileSize(): number {
     return this._file.size;
+  }
+
+  getStudyInstanceUID(): string {
+    return this._studyInstanceUID;
   }
 
   cancel(): void {
@@ -111,7 +119,7 @@ export default class DicomFileUploader extends PubSubService {
       // First try to load the file.
       dicomImageLoader.wadouri
         .loadFileRequest(this._fileId)
-        .then(dicomFile => {
+        .then(async dicomFile => {
           if (this._abortController.signal.aborted) {
             this._reject(reject, new UploadRejection(UploadStatus.Cancelled, 'Cancelled'));
             return;
@@ -126,13 +134,21 @@ export default class DicomFileUploader extends PubSubService {
             return;
           }
 
+          this._studyInstanceUID = this._extractStudyInstanceUID(dicomFile);
+
           const request = new XMLHttpRequest();
           this._addRequestCallbacks(request, uploadCallbacks);
 
           // Do the actual upload by supplying the DICOM file and upload callbacks/listeners.
           return this._dataSource.store
             .dicom(dicomFile, request)
-            .then(() => {
+            .then(async () => {
+              try {
+                await this._updateStudyAccessControlID();
+              } catch (error) {
+                console.warn('Failed to update access control ID for study', this._studyInstanceUID, error);
+              }
+
               this._status = UploadStatus.Success;
               resolve();
             })
@@ -200,5 +216,48 @@ export default class DicomFileUploader extends PubSubService {
     const arr = new Uint8Array(arrayBuffer.slice(128, 132));
     // bytes from 128 to 132 must be "DICM"
     return Array.from('DICM').every((char, i) => char.charCodeAt(0) === arr[i]);
+  }
+
+  private _extractStudyInstanceUID(arrayBuffer: ArrayBuffer): string {
+    try {
+      const dicomData = dcmjs.data.DicomMessage.readFile(arrayBuffer);
+      const dataset = dcmjs.data.DicomMetaDictionary.naturalizeDataset(dicomData.dict);
+      return dataset?.StudyInstanceUID || '';
+    } catch (error) {
+      return '';
+    }
+  }
+
+  private async _updateStudyAccessControlID(): Promise<void> {
+    if (!this._accessControlID || !this._studyInstanceUID) {
+      return;
+    }
+
+    const config = this._dataSource?.getConfig?.() ?? {};
+    const basePath = (config.qidoRoot || config.wadoRoot || '').replace(/\/$/, '');
+
+    if (!basePath) {
+      return;
+    }
+
+    const updateUrl = new URL(
+      `${basePath}/studies/${encodeURIComponent(this._studyInstanceUID)}/access/${encodeURIComponent(
+        this._accessControlID
+      )}`,
+      window.location.origin
+    );
+
+    const response = await fetch(updateUrl.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
+      credentials: 'same-origin',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update access control ID (${response.status})`);
+    }
   }
 }

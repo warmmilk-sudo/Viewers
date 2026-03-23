@@ -72,7 +72,7 @@ function Header({
             >
               {isReturnEnabled && <Icons.ArrowLeft className="text-primary ml-1 h-7 w-7" />}
               <div className="ml-1">
-                {WhiteLabeling?.createLogoComponentFn?.(React, props) || <Icons.OHIFLogo />}
+                {WhiteLabeling?.createLogoComponentFn?.(React, props) || <span className="text-primary-light text-xl font-semibold" style={{ letterSpacing: "0.12em" }}>Hygea</span>}
               </div>
             </div>
           </div>
