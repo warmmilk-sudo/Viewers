@@ -1960,3 +1960,284 @@ NameError: name 'collect_study_category_map' is not defined
 2026-03-25 16:03:01,074 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\12-1.13-12.51 -> 1 series dir(s)
 2026-03-25 16:03:02,632 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\12-1.13-12.51\S_DFC176CF-4FC9-4CB8-86F7-0FAB896F72D1 -> 1 study group(s), 234 file(s)
 2026-03-25 16:03:02,632 [INFO] [OVERWRITE] S_DFC176CF-4FC9-4CB8-86F7-0FAB896F72D1 will reupload existing instances instead of skipping them.
+2026-03-25 16:04:24,271 [INFO] [OK] S_DFC176CF-4FC9-4CB8-86F7-0FAB896F72D1 study=1.2.840.113619.2.278.3.497870658.331.1736727243.409 stored 233 file(s) this round
+2026-03-25 16:04:24,609 [INFO] [SYNC] study dir=12-1.13-12.51 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:04:24,656 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727243.409 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:04:24,657 [INFO] [SYNC] study dir=12-1.13-12.51 viewer category updated for 1 study/studies
+2026-03-25 16:04:24,657 [INFO] [STUDY] processing 13-1.10-10.04
+2026-03-25 16:04:24,657 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\13-1.10-10.04 -> 1 series dir(s)
+2026-03-25 16:04:25,948 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\13-1.10-10.04\S_76F71463-135E-4C88-84AB-630E3A97AA46 -> 1 study group(s), 245 file(s)
+2026-03-25 16:04:25,948 [INFO] [OVERWRITE] S_76F71463-135E-4C88-84AB-630E3A97AA46 will reupload existing instances instead of skipping them.
+2026-03-25 16:05:51,476 [INFO] [OK] S_76F71463-135E-4C88-84AB-630E3A97AA46 study=1.2.840.113619.2.278.3.497870658.268.1736301235.224 stored 244 file(s) this round
+2026-03-25 16:05:51,829 [INFO] [SYNC] study dir=13-1.10-10.04 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:05:51,867 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.268.1736301235.224 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:05:51,867 [INFO] [SYNC] study dir=13-1.10-10.04 viewer category updated for 1 study/studies
+2026-03-25 16:05:51,867 [INFO] [STUDY] processing 14-1.16-13.28
+2026-03-25 16:05:51,868 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\14-1.16-13.28 -> 1 series dir(s)
+2026-03-25 16:05:53,404 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\14-1.16-13.28\S_9D8A3D82-7151-4CB1-AD06-AE1A0409A32C -> 1 study group(s), 261 file(s)
+2026-03-25 16:05:53,404 [INFO] [OVERWRITE] S_9D8A3D82-7151-4CB1-AD06-AE1A0409A32C will reupload existing instances instead of skipping them.
+2026-03-25 16:07:24,804 [INFO] [OK] S_9D8A3D82-7151-4CB1-AD06-AE1A0409A32C study=1.2.840.113619.2.278.3.497870658.331.1736727250.632 stored 260 file(s) this round
+2026-03-25 16:07:25,189 [INFO] [SYNC] study dir=14-1.16-13.28 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:07:25,237 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727250.632 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:07:25,237 [INFO] [SYNC] study dir=14-1.16-13.28 viewer category updated for 1 study/studies
+2026-03-25 16:07:25,238 [INFO] [STUDY] processing 15-1.20-12.15
+2026-03-25 16:07:25,238 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\15-1.20-12.15 -> 1 series dir(s)
+2026-03-25 16:07:26,579 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\15-1.20-12.15\S_7E974A48-4D60-4250-AF9B-515CB83E7558 -> 1 study group(s), 219 file(s)
+2026-03-25 16:07:26,580 [INFO] [OVERWRITE] S_7E974A48-4D60-4250-AF9B-515CB83E7558 will reupload existing instances instead of skipping them.
+2026-03-25 16:08:42,643 [INFO] [OK] S_7E974A48-4D60-4250-AF9B-515CB83E7558 study=1.2.840.113619.2.278.3.497870658.331.1736727256.30 stored 218 file(s) this round
+2026-03-25 16:08:42,968 [INFO] [SYNC] study dir=15-1.20-12.15 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:08:43,009 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727256.30 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:08:43,009 [INFO] [SYNC] study dir=15-1.20-12.15 viewer category updated for 1 study/studies
+2026-03-25 16:08:43,009 [INFO] [STUDY] processing 16-1.13-9.41
+2026-03-25 16:08:43,010 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\16-1.13-9.41 -> 1 series dir(s)
+2026-03-25 16:08:44,536 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\16-1.13-9.41\S_F66BA060-201A-45E6-A30D-94959A37E2DC -> 1 study group(s), 247 file(s)
+2026-03-25 16:08:44,537 [INFO] [OVERWRITE] S_F66BA060-201A-45E6-A30D-94959A37E2DC will reupload existing instances instead of skipping them.
+2026-03-25 16:10:10,082 [INFO] [OK] S_F66BA060-201A-45E6-A30D-94959A37E2DC study=1.2.840.113619.2.278.3.497870658.331.1736727242.563 stored 246 file(s) this round
+2026-03-25 16:10:10,432 [INFO] [SYNC] study dir=16-1.13-9.41 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:10:10,471 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727242.563 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:10:10,471 [INFO] [SYNC] study dir=16-1.13-9.41 viewer category updated for 1 study/studies
+2026-03-25 16:10:10,471 [INFO] [STUDY] processing 17-1.17-10.50
+2026-03-25 16:10:10,472 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\17-1.17-10.50 -> 1 series dir(s)
+2026-03-25 16:10:11,829 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\17-1.17-10.50\S_DDC3DDB0-CAAC-4653-BE83-0E2363369220 -> 1 study group(s), 238 file(s)
+2026-03-25 16:10:11,829 [INFO] [OVERWRITE] S_DDC3DDB0-CAAC-4653-BE83-0E2363369220 will reupload existing instances instead of skipping them.
+2026-03-25 16:11:34,907 [INFO] [OK] S_DDC3DDB0-CAAC-4653-BE83-0E2363369220 study=1.2.840.113619.2.278.3.497870658.331.1736727253.158 stored 238 file(s) this round
+2026-03-25 16:11:35,224 [INFO] [SYNC] study dir=17-1.17-10.50 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:11:35,280 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727253.158 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:11:35,280 [INFO] [SYNC] study dir=17-1.17-10.50 viewer category updated for 1 study/studies
+2026-03-25 16:11:35,280 [INFO] [STUDY] processing 18-1.16-14.58-liver
+2026-03-25 16:11:35,281 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\18-1.16-14.58-liver -> 1 series dir(s)
+2026-03-25 16:11:36,386 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\18-1.16-14.58-liver\S_16B8A2CE-7C45-4C08-A084-E03952AC06ED -> 1 study group(s), 189 file(s)
+2026-03-25 16:11:36,387 [INFO] [OVERWRITE] S_16B8A2CE-7C45-4C08-A084-E03952AC06ED will reupload existing instances instead of skipping them.
+2026-03-25 16:12:42,290 [INFO] [OK] S_16B8A2CE-7C45-4C08-A084-E03952AC06ED study=1.2.840.113619.2.278.3.497870658.331.1736727251.397 stored 188 file(s) this round
+2026-03-25 16:12:42,598 [INFO] [SYNC] study dir=18-1.16-14.58-liver study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:12:42,630 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727251.397 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:12:42,631 [INFO] [SYNC] study dir=18-1.16-14.58-liver viewer category updated for 1 study/studies
+2026-03-25 16:12:42,631 [INFO] [STUDY] processing 19-1.22-10.44
+2026-03-25 16:12:42,631 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\19-1.22-10.44 -> 1 series dir(s)
+2026-03-25 16:12:44,071 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\19-1.22-10.44\S_1DBF8D8D-1814-4692-8780-4C587B1EC2D3 -> 1 study group(s), 220 file(s)
+2026-03-25 16:12:44,071 [INFO] [OVERWRITE] S_1DBF8D8D-1814-4692-8780-4C587B1EC2D3 will reupload existing instances instead of skipping them.
+2026-03-25 16:14:01,425 [INFO] [OK] S_1DBF8D8D-1814-4692-8780-4C587B1EC2D3 study=1.2.840.113619.2.278.3.497870658.331.1736727261.958 stored 219 file(s) this round
+2026-03-25 16:14:01,754 [INFO] [SYNC] study dir=19-1.22-10.44 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:14:01,793 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727261.958 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:14:01,793 [INFO] [SYNC] study dir=19-1.22-10.44 viewer category updated for 1 study/studies
+2026-03-25 16:14:01,793 [INFO] [STUDY] processing 2-1.22-12.51
+2026-03-25 16:14:01,794 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\2-1.22-12.51 -> 2 series dir(s)
+2026-03-25 16:14:01,892 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\2-1.22-12.51\1 -> 1 study group(s), 15 file(s)
+2026-03-25 16:14:01,892 [INFO] [OVERWRITE] 1 will reupload existing instances instead of skipping them.
+2026-03-25 16:14:03,156 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\2-1.22-12.51\2 -> 1 study group(s), 233 file(s)
+2026-03-25 16:14:03,156 [INFO] [OVERWRITE] 2 will reupload existing instances instead of skipping them.
+2026-03-25 16:14:10,878 [INFO] [OK] 1 study=1.2.840.113619.2.278.3.497870658.331.1736727262.789 stored 15 file(s) this round
+2026-03-25 16:15:42,485 [INFO] [OK] 2 study=1.2.840.113619.2.278.3.497870658.331.1736727262.789 stored 233 file(s) this round
+2026-03-25 16:15:42,802 [INFO] [SYNC] study dir=2-1.22-12.51 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:15:42,835 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727262.789 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:15:42,835 [INFO] [SYNC] study dir=2-1.22-12.51 viewer category updated for 1 study/studies
+2026-03-25 16:15:42,835 [INFO] [STUDY] processing 20-1.23-13.51
+2026-03-25 16:15:42,836 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\20-1.23-13.51 -> 1 series dir(s)
+2026-03-25 16:15:44,380 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\20-1.23-13.51\S_FF292802-2858-4DC1-B2EC-245056FDABAB -> 1 study group(s), 245 file(s)
+2026-03-25 16:15:44,380 [INFO] [OVERWRITE] S_FF292802-2858-4DC1-B2EC-245056FDABAB will reupload existing instances instead of skipping them.
+2026-03-25 16:17:09,950 [INFO] [OK] S_FF292802-2858-4DC1-B2EC-245056FDABAB study=1.2.840.113619.2.278.3.497870658.331.1736727266.894 stored 245 file(s) this round
+2026-03-25 16:17:10,274 [INFO] [SYNC] study dir=20-1.23-13.51 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:17:10,316 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727266.894 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:17:10,316 [INFO] [SYNC] study dir=20-1.23-13.51 viewer category updated for 1 study/studies
+2026-03-25 16:17:10,317 [INFO] [STUDY] processing 21-1.15-9.32
+2026-03-25 16:17:10,317 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\21-1.15-9.32 -> 1 series dir(s)
+2026-03-25 16:17:11,567 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\21-1.15-9.32\S_6BA62416-455B-42C3-B010-2412D26EA564 -> 1 study group(s), 206 file(s)
+2026-03-25 16:17:11,568 [INFO] [OVERWRITE] S_6BA62416-455B-42C3-B010-2412D26EA564 will reupload existing instances instead of skipping them.
+2026-03-25 16:18:23,208 [INFO] [OK] S_6BA62416-455B-42C3-B010-2412D26EA564 study=1.2.840.113619.2.278.3.497870658.331.1736727247.502 stored 205 file(s) this round
+2026-03-25 16:18:23,529 [INFO] [SYNC] study dir=21-1.15-9.32 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:18:23,570 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727247.502 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:18:23,570 [INFO] [SYNC] study dir=21-1.15-9.32 viewer category updated for 1 study/studies
+2026-03-25 16:18:23,570 [INFO] [STUDY] processing 22-1.10-9.22
+2026-03-25 16:18:23,570 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\22-1.10-9.22 -> 1 series dir(s)
+2026-03-25 16:18:25,016 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\22-1.10-9.22\S_D6D268E6-035C-41B9-BD5E-E05746877715 -> 1 study group(s), 197 file(s)
+2026-03-25 16:18:25,017 [INFO] [OVERWRITE] S_D6D268E6-035C-41B9-BD5E-E05746877715 will reupload existing instances instead of skipping them.
+2026-03-25 16:19:33,639 [INFO] [OK] S_D6D268E6-035C-41B9-BD5E-E05746877715 study=1.2.840.113619.2.278.3.497870658.268.1736301234.919 stored 196 file(s) this round
+2026-03-25 16:19:33,933 [INFO] [SYNC] study dir=22-1.10-9.22 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:19:33,963 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.268.1736301234.919 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:19:33,963 [INFO] [SYNC] study dir=22-1.10-9.22 viewer category updated for 1 study/studies
+2026-03-25 16:19:33,964 [INFO] [STUDY] processing 23-1.15-11.33
+2026-03-25 16:19:33,964 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\23-1.15-11.33 -> 1 series dir(s)
+2026-03-25 16:19:35,732 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\23-1.15-11.33\S_53C20EE7-B392-4A00-AD6D-53EF14CFFD0B -> 1 study group(s), 286 file(s)
+2026-03-25 16:19:35,732 [INFO] [OVERWRITE] S_53C20EE7-B392-4A00-AD6D-53EF14CFFD0B will reupload existing instances instead of skipping them.
+2026-03-25 16:21:14,902 [INFO] [OK] S_53C20EE7-B392-4A00-AD6D-53EF14CFFD0B study=1.2.840.113619.2.278.3.497870658.331.1736727248.197 stored 285 file(s) this round
+2026-03-25 16:21:15,303 [INFO] [SYNC] study dir=23-1.15-11.33 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:21:15,345 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727248.197 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:21:15,345 [INFO] [SYNC] study dir=23-1.15-11.33 viewer category updated for 1 study/studies
+2026-03-25 16:21:15,345 [INFO] [STUDY] processing 24-1.20-9.31
+2026-03-25 16:21:15,345 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\24-1.20-9.31 -> 1 series dir(s)
+2026-03-25 16:21:16,723 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\24-1.20-9.31\S_DA26AD37-E882-4218-8985-45689D2D7AA7 -> 1 study group(s), 233 file(s)
+2026-03-25 16:21:16,723 [INFO] [OVERWRITE] S_DA26AD37-E882-4218-8985-45689D2D7AA7 will reupload existing instances instead of skipping them.
+2026-03-25 16:22:38,408 [INFO] [OK] S_DA26AD37-E882-4218-8985-45689D2D7AA7 study=1.2.840.113619.2.278.3.497870658.331.1736727255.147 stored 232 file(s) this round
+2026-03-25 16:22:38,735 [INFO] [SYNC] study dir=24-1.20-9.31 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:22:38,766 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727255.147 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:22:38,766 [INFO] [SYNC] study dir=24-1.20-9.31 viewer category updated for 1 study/studies
+2026-03-25 16:22:38,767 [INFO] [STUDY] processing 25-1.13-13.24
+2026-03-25 16:22:38,767 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\25-1.13-13.24 -> 1 series dir(s)
+2026-03-25 16:22:39,975 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\25-1.13-13.24\S_0CE7B593-6FD8-4217-BD63-06F7BE5FDE55 -> 1 study group(s), 217 file(s)
+2026-03-25 16:22:39,975 [INFO] [OVERWRITE] S_0CE7B593-6FD8-4217-BD63-06F7BE5FDE55 will reupload existing instances instead of skipping them.
+2026-03-25 16:23:56,208 [INFO] [OK] S_0CE7B593-6FD8-4217-BD63-06F7BE5FDE55 study=1.2.840.113619.2.278.3.497870658.331.1736727243.722 stored 216 file(s) this round
+2026-03-25 16:23:56,523 [INFO] [SYNC] study dir=25-1.13-13.24 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:23:56,575 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727243.722 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:23:56,575 [INFO] [SYNC] study dir=25-1.13-13.24 viewer category updated for 1 study/studies
+2026-03-25 16:23:56,575 [INFO] [STUDY] processing 26-1.14-15.24
+2026-03-25 16:23:56,575 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\26-1.14-15.24 -> 1 series dir(s)
+2026-03-25 16:23:57,823 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\26-1.14-15.24\S_A7B8DEAC-3259-4C23-A92B-C731BC70C51D -> 1 study group(s), 224 file(s)
+2026-03-25 16:23:57,823 [INFO] [OVERWRITE] S_A7B8DEAC-3259-4C23-A92B-C731BC70C51D will reupload existing instances instead of skipping them.
+2026-03-25 16:25:16,187 [INFO] [OK] S_A7B8DEAC-3259-4C23-A92B-C731BC70C51D study=1.2.840.113619.2.278.3.497870658.331.1736727246.344 stored 223 file(s) this round
+2026-03-25 16:25:16,540 [INFO] [SYNC] study dir=26-1.14-15.24 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:25:16,566 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727246.344 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:25:16,566 [INFO] [SYNC] study dir=26-1.14-15.24 viewer category updated for 1 study/studies
+2026-03-25 16:25:16,566 [INFO] [STUDY] processing 27-1.16-14.08
+2026-03-25 16:25:16,567 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\27-1.16-14.08 -> 1 series dir(s)
+2026-03-25 16:25:18,144 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\27-1.16-14.08\S_F74256ED-D920-4FF2-B1FD-D3E338D79617 -> 1 study group(s), 264 file(s)
+2026-03-25 16:25:18,144 [INFO] [OVERWRITE] S_F74256ED-D920-4FF2-B1FD-D3E338D79617 will reupload existing instances instead of skipping them.
+2026-03-25 16:27:20,438 [INFO] [OK] S_F74256ED-D920-4FF2-B1FD-D3E338D79617 study=1.2.840.113619.2.278.3.497870658.331.1736727250.976 stored 263 file(s) this round
+2026-03-25 16:27:20,881 [INFO] [SYNC] study dir=27-1.16-14.08 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:27:20,937 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727250.976 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:27:20,937 [INFO] [SYNC] study dir=27-1.16-14.08 viewer category updated for 1 study/studies
+2026-03-25 16:27:20,937 [INFO] [STUDY] processing 28-1.23-12.07
+2026-03-25 16:27:20,938 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\28-1.23-12.07 -> 1 series dir(s)
+2026-03-25 16:27:22,501 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\28-1.23-12.07\S_E1914D21-6D39-4873-B1F6-DB66D6D44799 -> 1 study group(s), 248 file(s)
+2026-03-25 16:27:22,501 [INFO] [OVERWRITE] S_E1914D21-6D39-4873-B1F6-DB66D6D44799 will reupload existing instances instead of skipping them.
+2026-03-25 16:28:44,307 [WARNING] Existence check failed for 1.2.840.113619.2.278.3.497870658.331.1736727266.540.1 in C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\28-1.23-12.07\S_E1914D21-6D39-4873-B1F6-DB66D6D44799\SE_1B704DC6-0169-4CEE-9EA9-D8D48526E1ED: Failed to establish DICOM association to 172.16.82.11:11112 as PYNETDICOM -> DCM4CHEE
+2026-03-25 16:29:13,063 [INFO] [OK] S_E1914D21-6D39-4873-B1F6-DB66D6D44799 study=1.2.840.113619.2.278.3.497870658.331.1736727266.238 stored 248 file(s) this round
+2026-03-25 16:29:13,527 [INFO] [SYNC] study dir=28-1.23-12.07 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:29:13,584 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727266.238 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:29:13,585 [INFO] [SYNC] study dir=28-1.23-12.07 viewer category updated for 1 study/studies
+2026-03-25 16:29:13,585 [INFO] [STUDY] processing 29-1.23-12.46
+2026-03-25 16:29:13,585 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\29-1.23-12.46 -> 1 series dir(s)
+2026-03-25 16:29:15,124 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\29-1.23-12.46\S_2A3E3037-AB96-463D-8C11-0FB9FBFAF60D -> 1 study group(s), 232 file(s)
+2026-03-25 16:29:15,124 [INFO] [OVERWRITE] S_2A3E3037-AB96-463D-8C11-0FB9FBFAF60D will reupload existing instances instead of skipping them.
+2026-03-25 16:33:09,188 [INFO] [OK] S_2A3E3037-AB96-463D-8C11-0FB9FBFAF60D study=1.2.840.113619.2.278.3.497870658.331.1736727266.620 stored 232 file(s) this round
+2026-03-25 16:33:29,503 [INFO] [SYNC] study dir=29-1.23-12.46 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:33:59,516 [WARNING] [WARN] failed to sync viewer category for study=1.2.840.113619.2.278.3.497870658.331.1736727266.620 path=临床试验数据/北京医院: timed out
+2026-03-25 16:33:59,516 [INFO] [SYNC] study dir=29-1.23-12.46 viewer category updated for 0 study/studies
+2026-03-25 16:33:59,516 [INFO] [STUDY] processing 3-1.21-11.25-liver
+2026-03-25 16:33:59,518 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\3-1.21-11.25-liver -> 2 series dir(s)
+2026-03-25 16:33:59,595 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\3-1.21-11.25-liver\SE_B5A0DAD9-2746-41F1-8B72-AF908520E6A6 -> 1 study group(s), 11 file(s)
+2026-03-25 16:33:59,595 [INFO] [OVERWRITE] SE_B5A0DAD9-2746-41F1-8B72-AF908520E6A6 will reupload existing instances instead of skipping them.
+2026-03-25 16:34:00,492 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\3-1.21-11.25-liver\SE_2DB68418-03EA-45AF-90C2-71C51B14B0EA -> 1 study group(s), 142 file(s)
+2026-03-25 16:34:00,492 [INFO] [OVERWRITE] SE_2DB68418-03EA-45AF-90C2-71C51B14B0EA will reupload existing instances instead of skipping them.
+2026-03-25 16:34:05,991 [INFO] [OK] SE_B5A0DAD9-2746-41F1-8B72-AF908520E6A6 study=1.2.840.113619.2.278.3.497870658.331.1736727258.573 stored 11 file(s) this round
+2026-03-25 16:35:10,446 [INFO] [OK] SE_2DB68418-03EA-45AF-90C2-71C51B14B0EA study=1.2.840.113619.2.278.3.497870658.331.1736727258.573 stored 141 file(s) this round
+2026-03-25 16:35:10,704 [INFO] [SYNC] study dir=3-1.21-11.25-liver study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:35:10,758 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727258.573 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:35:10,759 [INFO] [SYNC] study dir=3-1.21-11.25-liver viewer category updated for 1 study/studies
+2026-03-25 16:35:10,759 [INFO] [STUDY] processing 30-1.21-12.52
+2026-03-25 16:35:10,759 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\30-1.21-12.52 -> 1 series dir(s)
+2026-03-25 16:35:12,170 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\30-1.21-12.52\P_C77E3821-5EF3-4AFB-A2F4-58732625E9C4 -> 1 study group(s), 194 file(s)
+2026-03-25 16:35:12,170 [INFO] [OVERWRITE] P_C77E3821-5EF3-4AFB-A2F4-58732625E9C4 will reupload existing instances instead of skipping them.
+2026-03-25 16:36:23,679 [INFO] [OK] P_C77E3821-5EF3-4AFB-A2F4-58732625E9C4 study=1.2.840.113619.2.278.3.497870658.331.1736727259.214 stored 193 file(s) this round
+2026-03-25 16:36:23,989 [INFO] [SYNC] study dir=30-1.21-12.52 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:36:24,030 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727259.214 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:36:24,030 [INFO] [SYNC] study dir=30-1.21-12.52 viewer category updated for 1 study/studies
+2026-03-25 16:36:24,030 [INFO] [STUDY] processing 31-1.10-8.30
+2026-03-25 16:36:24,031 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\31-1.10-8.30 -> 1 series dir(s)
+2026-03-25 16:36:25,586 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\31-1.10-8.30\S_A6ED3784-D49D-4F80-A9D4-8A3A4AEABEDF -> 1 study group(s), 252 file(s)
+2026-03-25 16:36:25,586 [INFO] [OVERWRITE] S_A6ED3784-D49D-4F80-A9D4-8A3A4AEABEDF will reupload existing instances instead of skipping them.
+2026-03-25 16:40:14,510 [INFO] [OK] S_A6ED3784-D49D-4F80-A9D4-8A3A4AEABEDF study=1.2.840.113619.2.278.3.497870658.268.1736301234.423 stored 251 file(s) this round
+2026-03-25 16:40:14,874 [INFO] [SYNC] study dir=31-1.10-8.30 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:40:14,921 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.268.1736301234.423 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:40:14,921 [INFO] [SYNC] study dir=31-1.10-8.30 viewer category updated for 1 study/studies
+2026-03-25 16:40:14,921 [INFO] [STUDY] processing 32-1.10-12.08-liver
+2026-03-25 16:40:14,922 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\32-1.10-12.08-liver -> 1 series dir(s)
+2026-03-25 16:40:16,043 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\32-1.10-12.08-liver\S_74C74611-8E6F-4645-BE07-35C66728E15E -> 1 study group(s), 177 file(s)
+2026-03-25 16:40:16,044 [INFO] [OVERWRITE] S_74C74611-8E6F-4645-BE07-35C66728E15E will reupload existing instances instead of skipping them.
+2026-03-25 16:41:17,962 [INFO] [OK] S_74C74611-8E6F-4645-BE07-35C66728E15E study=1.2.840.113619.2.278.3.497870658.268.1736301235.714 stored 176 file(s) this round
+2026-03-25 16:41:18,234 [INFO] [SYNC] study dir=32-1.10-12.08-liver study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:41:18,266 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.268.1736301235.714 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:41:18,266 [INFO] [SYNC] study dir=32-1.10-12.08-liver viewer category updated for 1 study/studies
+2026-03-25 16:41:18,266 [INFO] [STUDY] processing 33-1.17-11.34
+2026-03-25 16:41:18,267 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\33-1.17-11.34 -> 1 series dir(s)
+2026-03-25 16:41:19,659 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\33-1.17-11.34\S_71DBA543-7FF2-4900-B8A4-604E5ADCED70 -> 1 study group(s), 227 file(s)
+2026-03-25 16:41:19,659 [INFO] [OVERWRITE] S_71DBA543-7FF2-4900-B8A4-604E5ADCED70 will reupload existing instances instead of skipping them.
+2026-03-25 16:42:40,506 [INFO] [OK] S_71DBA543-7FF2-4900-B8A4-604E5ADCED70 study=1.2.840.113619.2.278.3.497870658.331.1736727253.654 stored 226 file(s) this round
+2026-03-25 16:42:40,835 [INFO] [SYNC] study dir=33-1.17-11.34 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:42:40,876 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727253.654 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:42:40,876 [INFO] [SYNC] study dir=33-1.17-11.34 viewer category updated for 1 study/studies
+2026-03-25 16:42:40,877 [INFO] [STUDY] processing 34-1.13-10.50
+2026-03-25 16:42:40,877 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\34-1.13-10.50 -> 1 series dir(s)
+2026-03-25 16:42:42,187 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\34-1.13-10.50\S_E3B48CE2-F0A0-4B78-A83F-568054DB8527 -> 1 study group(s), 207 file(s)
+2026-03-25 16:42:42,187 [INFO] [OVERWRITE] S_E3B48CE2-F0A0-4B78-A83F-568054DB8527 will reupload existing instances instead of skipping them.
+2026-03-25 16:43:55,428 [INFO] [OK] S_E3B48CE2-F0A0-4B78-A83F-568054DB8527 study=1.2.840.113619.2.278.3.497870658.331.1736727242.934 stored 206 file(s) this round
+2026-03-25 16:43:55,755 [INFO] [SYNC] study dir=34-1.13-10.50 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:43:55,793 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727242.934 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:43:55,793 [INFO] [SYNC] study dir=34-1.13-10.50 viewer category updated for 1 study/studies
+2026-03-25 16:43:55,793 [INFO] [STUDY] processing 35-1.15-13.50
+2026-03-25 16:43:55,794 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\35-1.15-13.50 -> 1 series dir(s)
+2026-03-25 16:43:57,487 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\35-1.15-13.50\S_729FF06C-75F1-40E7-B3A8-AD060EF38E4F -> 1 study group(s), 251 file(s)
+2026-03-25 16:43:57,487 [INFO] [OVERWRITE] S_729FF06C-75F1-40E7-B3A8-AD060EF38E4F will reupload existing instances instead of skipping them.
+2026-03-25 16:45:23,766 [INFO] [OK] S_729FF06C-75F1-40E7-B3A8-AD060EF38E4F study=1.2.840.113619.2.278.3.497870658.331.1736727248.774 stored 250 file(s) this round
+2026-03-25 16:45:24,129 [INFO] [SYNC] study dir=35-1.15-13.50 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:45:24,169 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727248.774 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:45:24,169 [INFO] [SYNC] study dir=35-1.15-13.50 viewer category updated for 1 study/studies
+2026-03-25 16:45:24,169 [INFO] [STUDY] processing 36-1.22-13.24
+2026-03-25 16:45:24,169 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\36-1.22-13.24 -> 1 series dir(s)
+2026-03-25 16:45:25,385 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\36-1.22-13.24\S_E845BAF5-A9F1-4AB3-9E8F-42D5D7F10EDE -> 1 study group(s), 180 file(s)
+2026-03-25 16:45:25,385 [INFO] [OVERWRITE] S_E845BAF5-A9F1-4AB3-9E8F-42D5D7F10EDE will reupload existing instances instead of skipping them.
+2026-03-25 16:46:28,209 [INFO] [OK] S_E845BAF5-A9F1-4AB3-9E8F-42D5D7F10EDE study=1.2.840.113619.2.278.3.497870658.331.1736727263.255 stored 180 file(s) this round
+2026-03-25 16:46:28,477 [INFO] [SYNC] study dir=36-1.22-13.24 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:46:28,516 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727263.255 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:46:28,516 [INFO] [SYNC] study dir=36-1.22-13.24 viewer category updated for 1 study/studies
+2026-03-25 16:46:28,516 [INFO] [STUDY] processing 37-1.21-10.02
+2026-03-25 16:46:28,517 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\37-1.21-10.02 -> 1 series dir(s)
+2026-03-25 16:46:30,473 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\37-1.21-10.02\S_6E5FAD3F-76FD-4C7A-84AA-54E7DD9799F4 -> 1 study group(s), 241 file(s)
+2026-03-25 16:46:30,473 [INFO] [OVERWRITE] S_6E5FAD3F-76FD-4C7A-84AA-54E7DD9799F4 will reupload existing instances instead of skipping them.
+2026-03-25 16:47:55,357 [INFO] [OK] S_6E5FAD3F-76FD-4C7A-84AA-54E7DD9799F4 study=1.2.840.113619.2.278.3.497870658.331.1736727258.227 stored 240 file(s) this round
+2026-03-25 16:47:55,720 [INFO] [SYNC] study dir=37-1.21-10.02 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:47:55,759 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727258.227 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:47:55,759 [INFO] [SYNC] study dir=37-1.21-10.02 viewer category updated for 1 study/studies
+2026-03-25 16:47:55,759 [INFO] [STUDY] processing 38-1.22-9.45
+2026-03-25 16:47:55,760 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\38-1.22-9.45 -> 1 series dir(s)
+2026-03-25 16:47:57,497 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\38-1.22-9.45\S_BBEC346C-42DF-48DA-BA51-BB05CB6E4326 -> 1 study group(s), 247 file(s)
+2026-03-25 16:47:57,498 [INFO] [OVERWRITE] S_BBEC346C-42DF-48DA-BA51-BB05CB6E4326 will reupload existing instances instead of skipping them.
+2026-03-25 16:49:24,394 [INFO] [OK] S_BBEC346C-42DF-48DA-BA51-BB05CB6E4326 study=1.2.840.113619.2.278.3.497870658.331.1736727261.437 stored 246 file(s) this round
+2026-03-25 16:49:24,762 [INFO] [SYNC] study dir=38-1.22-9.45 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:49:24,813 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727261.437 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:49:24,813 [INFO] [SYNC] study dir=38-1.22-9.45 viewer category updated for 1 study/studies
+2026-03-25 16:49:24,814 [INFO] [STUDY] processing 39-1.22-11.10
+2026-03-25 16:49:24,814 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\39-1.22-11.10 -> 1 series dir(s)
+2026-03-25 16:49:26,354 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\39-1.22-11.10\S_AA1EF1B6-B74F-45C6-A9F5-6CE4F6A3A5DE -> 1 study group(s), 220 file(s)
+2026-03-25 16:49:26,355 [INFO] [OVERWRITE] S_AA1EF1B6-B74F-45C6-A9F5-6CE4F6A3A5DE will reupload existing instances instead of skipping them.
+2026-03-25 16:50:43,335 [INFO] [OK] S_AA1EF1B6-B74F-45C6-A9F5-6CE4F6A3A5DE study=1.2.840.113619.2.278.3.497870658.331.1736727262.195 stored 219 file(s) this round
+2026-03-25 16:50:43,877 [INFO] [SYNC] study dir=39-1.22-11.10 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:50:43,916 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727262.195 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:50:43,916 [INFO] [SYNC] study dir=39-1.22-11.10 viewer category updated for 1 study/studies
+2026-03-25 16:50:43,916 [INFO] [STUDY] processing 4-1.22-11.35
+2026-03-25 16:50:43,917 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\4-1.22-11.35 -> 1 series dir(s)
+2026-03-25 16:50:45,553 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\4-1.22-11.35\S_4F4D8537-E99F-480E-B822-CBABA442EB70 -> 1 study group(s), 213 file(s)
+2026-03-25 16:50:45,553 [INFO] [OVERWRITE] S_4F4D8537-E99F-480E-B822-CBABA442EB70 will reupload existing instances instead of skipping them.
+2026-03-25 16:52:00,905 [INFO] [OK] S_4F4D8537-E99F-480E-B822-CBABA442EB70 study=1.2.840.113619.2.278.3.497870658.331.1736727262.524 stored 212 file(s) this round
+2026-03-25 16:52:01,219 [INFO] [SYNC] study dir=4-1.22-11.35 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:52:01,271 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727262.524 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:52:01,271 [INFO] [SYNC] study dir=4-1.22-11.35 viewer category updated for 1 study/studies
+2026-03-25 16:52:01,271 [INFO] [STUDY] processing 5-1.23-10.11
+2026-03-25 16:52:01,271 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\5-1.23-10.11 -> 1 series dir(s)
+2026-03-25 16:52:02,544 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\5-1.23-10.11\S_76960A55-FF77-4587-B587-63E255F33A3B -> 1 study group(s), 217 file(s)
+2026-03-25 16:52:02,544 [INFO] [OVERWRITE] S_76960A55-FF77-4587-B587-63E255F33A3B will reupload existing instances instead of skipping them.
+2026-03-25 16:53:24,554 [INFO] [OK] S_76960A55-FF77-4587-B587-63E255F33A3B study=1.2.840.113619.2.278.3.497870658.331.1736727265.568 stored 216 file(s) this round
+2026-03-25 16:53:24,894 [INFO] [SYNC] study dir=5-1.23-10.11 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:53:24,971 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727265.568 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:53:24,971 [INFO] [SYNC] study dir=5-1.23-10.11 viewer category updated for 1 study/studies
+2026-03-25 16:53:24,971 [INFO] [STUDY] processing 6-1.17-9.57
+2026-03-25 16:53:24,972 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\6-1.17-9.57 -> 1 series dir(s)
+2026-03-25 16:53:26,164 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\6-1.17-9.57\S_1950106B-B308-4C6B-A25C-9D1D070014C6 -> 1 study group(s), 185 file(s)
+2026-03-25 16:53:26,164 [INFO] [OVERWRITE] S_1950106B-B308-4C6B-A25C-9D1D070014C6 will reupload existing instances instead of skipping them.
+2026-03-25 16:54:36,386 [INFO] [OK] S_1950106B-B308-4C6B-A25C-9D1D070014C6 study=1.2.840.113619.2.278.3.497870658.331.1736727252.815 stored 184 file(s) this round
+2026-03-25 16:54:36,706 [INFO] [SYNC] study dir=6-1.17-9.57 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:54:36,781 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727252.815 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:54:36,781 [INFO] [SYNC] study dir=6-1.17-9.57 viewer category updated for 1 study/studies
+2026-03-25 16:54:36,782 [INFO] [STUDY] processing 7-1.15-10.40
+2026-03-25 16:54:36,782 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\7-1.15-10.40 -> 1 series dir(s)
+2026-03-25 16:54:38,406 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\7-1.15-10.40\S_09AC535C-5399-4312-8B56-59F2B710BBF3 -> 1 study group(s), 257 file(s)
+2026-03-25 16:54:38,406 [INFO] [OVERWRITE] S_09AC535C-5399-4312-8B56-59F2B710BBF3 will reupload existing instances instead of skipping them.
+2026-03-25 16:55:59,934 [INFO] [META] staged copies will include (7777,1027) under DCM4CHEE Archive 5; study access-control will be verified via QIDO 77771027
+2026-03-25 16:55:59,935 [INFO] [STAGE] source=Z:\clinical_trial_data\01_hospital_raw_data\02_YouAn staging=C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_eiq_1nbp\02_YouAn
+2026-03-25 16:56:16,671 [INFO] [OK] S_09AC535C-5399-4312-8B56-59F2B710BBF3 study=1.2.840.113619.2.278.3.497870658.331.1736727247.848 stored 256 file(s) this round
+2026-03-25 16:56:17,081 [INFO] [SYNC] study dir=7-1.15-10.40 study(s)=1 syncing study access-control to dcm4chee
+2026-03-25 16:56:17,153 [INFO] [VERIFY] study=1.2.840.113619.2.278.3.497870658.331.1736727247.848 QIDO 77771027=临床试验数据/北京医院
+2026-03-25 16:56:17,153 [INFO] [SYNC] study dir=7-1.15-10.40 viewer category updated for 1 study/studies
+2026-03-25 16:56:17,153 [INFO] [STUDY] processing 8-1.13-15.22
+2026-03-25 16:56:17,154 [INFO] [STUDY] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\8-1.13-15.22 -> 1 series dir(s)
+2026-03-25 16:56:19,287 [INFO] [SERIES] C:\Users\HYGEA\AppData\Local\Temp\hygea_dicom_stage_spldxrfa\B01\8-1.13-15.22\S_BDCDD9BC-C874-4CAE-AE23-BDE1F4273337 -> 1 study group(s), 255 file(s)
+2026-03-25 16:56:19,287 [INFO] [OVERWRITE] S_BDCDD9BC-C874-4CAE-AE23-BDE1F4273337 will reupload existing instances instead of skipping them.

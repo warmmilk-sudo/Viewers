@@ -39,13 +39,7 @@ function getStudyClassificationValues(
   if (!values.length) {
     return dedupe(fallbackValue);
   }
-
-  const configuredValues = new Set(
-    buildConfiguredClassificationTree(config?.tree || []).flatMap(node => node.values)
-  );
-  const matchingValues = values.filter(value => configuredValues.has(value));
-
-  return dedupe(matchingValues.length ? matchingValues : fallbackValue);
+  return dedupe(values);
 }
 
 function buildConfiguredClassificationTree(
@@ -106,6 +100,24 @@ function buildLegacyClassificationTree(
     .sort(sortByLabel);
 }
 
+function buildDisplayClassificationTree(
+  studies: ClassificationStudy[],
+  config?: WorkListClassificationConfig
+): WorkListClassificationNode[] {
+  const configuredTree = buildConfiguredClassificationTree(config?.tree || []);
+  const dynamicTree = buildLegacyClassificationTree(studies, config);
+
+  if (!configuredTree.length) {
+    return dynamicTree;
+  }
+
+  if (!dynamicTree.length) {
+    return configuredTree;
+  }
+
+  return mergeClassificationNodes(configuredTree, dynamicTree).sort(sortByLabel);
+}
+
 function finalizeConfiguredNode(
   node: WorkListClassificationTreeNodeConfig
 ): WorkListClassificationNode {
@@ -135,6 +147,56 @@ function finalizeLegacyTreeBuilderNode(node: LegacyTreeBuilderNode): WorkListCla
     label: node.label,
     values,
     children: children.length ? children : undefined,
+  };
+}
+
+function mergeClassificationNodes(
+  configuredNodes: WorkListClassificationNode[],
+  dynamicNodes: WorkListClassificationNode[]
+): WorkListClassificationNode[] {
+  const merged = new Map<string, WorkListClassificationNode>();
+
+  configuredNodes.forEach(node => {
+    merged.set(node.label, cloneClassificationNode(node));
+  });
+
+  dynamicNodes.forEach(node => {
+    const existing = merged.get(node.label);
+    if (!existing) {
+      merged.set(node.label, cloneClassificationNode(node));
+      return;
+    }
+
+    merged.set(node.label, mergeClassificationNode(existing, node));
+  });
+
+  return Array.from(merged.values()).sort(sortByLabel);
+}
+
+function mergeClassificationNode(
+  configuredNode: WorkListClassificationNode,
+  dynamicNode: WorkListClassificationNode
+): WorkListClassificationNode {
+  return {
+    ...configuredNode,
+    values: dedupe([...configuredNode.values, ...dynamicNode.values]),
+    children: mergeOptionalChildren(configuredNode.children, dynamicNode.children),
+  };
+}
+
+function mergeOptionalChildren(
+  configuredChildren?: WorkListClassificationNode[],
+  dynamicChildren?: WorkListClassificationNode[]
+) {
+  const mergedChildren = mergeClassificationNodes(configuredChildren || [], dynamicChildren || []);
+  return mergedChildren.length ? mergedChildren : undefined;
+}
+
+function cloneClassificationNode(node: WorkListClassificationNode): WorkListClassificationNode {
+  return {
+    ...node,
+    values: [...node.values],
+    children: node.children?.map(child => cloneClassificationNode(child)),
   };
 }
 
@@ -195,6 +257,17 @@ function dedupe(values: string[]) {
 }
 
 function sortByLabel(a: { label: string }, b: { label: string }) {
+  const aIsUnclassified = a.label === '未分类';
+  const bIsUnclassified = b.label === '未分类';
+
+  if (aIsUnclassified && !bIsUnclassified) {
+    return 1;
+  }
+
+  if (!aIsUnclassified && bIsUnclassified) {
+    return -1;
+  }
+
   return a.label.localeCompare(b.label, 'zh-CN', { numeric: true, sensitivity: 'base' });
 }
 
@@ -216,6 +289,7 @@ export type {
   WorkListClassificationTreeNodeConfig,
 };
 export {
+  buildDisplayClassificationTree,
   buildConfiguredClassificationTree,
   buildLegacyClassificationTree,
   getStudyClassificationValues,

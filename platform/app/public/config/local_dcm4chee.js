@@ -145,7 +145,7 @@
   showStudyList: true,
   workListClassification: {
     title: '数据分类',
-    subtitle: '由独立分类树维护，读取 study.categoryPath',
+    subtitle: '读取 study.categoryPath，自动补充新分类分支',
     collapsedLabel: '分类',
     valueField: 'categoryPath',
     defaultValue: '未分类',

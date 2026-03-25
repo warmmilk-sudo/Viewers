@@ -378,6 +378,12 @@ def apply_category_metadata(
     block.add_new(PRIVATE_CATEGORY_ELEMENT, "LO", stored_category)
 
 
+def ensure_patient_name(dataset: Dataset) -> None:
+    patient_name = getattr(dataset, 'PatientName', None)
+    if patient_name is None or not str(patient_name).strip():
+        dataset.PatientName = 'anonymous'
+
+
 def stage_dicom_file(
     source_file: Path,
     destination_file: Path,
@@ -395,6 +401,7 @@ def stage_dicom_file(
     if any(ord(character) > 127 for character in serialize_category_path(category_path)):
         dataset.SpecificCharacterSet = "ISO_IR 192"
 
+    ensure_patient_name(dataset)
     apply_category_metadata(
         dataset,
         category_path,

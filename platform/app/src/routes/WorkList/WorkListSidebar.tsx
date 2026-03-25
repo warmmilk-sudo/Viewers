@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { Icons, ScrollArea } from '@ohif/ui-next';
 
 import {
-  buildConfiguredClassificationTree,
+  buildDisplayClassificationTree,
   getStudyClassificationValues,
   type ClassificationStudy,
   type WorkListClassificationConfig,
@@ -28,8 +28,8 @@ function WorkListSidebar({
   sidebarConfig,
 }: WorkListSidebarProps) {
   const treeItems = useMemo(() => {
-    return buildConfiguredClassificationTree(sidebarConfig?.tree || []);
-  }, [sidebarConfig]);
+    return buildDisplayClassificationTree(studies, sidebarConfig);
+  }, [sidebarConfig, studies]);
 
   const activeValueSet = useMemo(
     () => new Set(activeCategoryValues.filter(Boolean)),
