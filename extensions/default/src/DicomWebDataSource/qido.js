@@ -27,6 +27,21 @@ import { sortStudySeries } from '@ohif/core/src/utils/sortStudy';
 
 const { getString, getName, getModalities } = DICOMWeb;
 
+function normalizeCategoryPath(value) {
+  if (!value) {
+    return '';
+  }
+
+  return `${value}`
+    .trim()
+    .replace(/\\+/g, '/')
+    .replace(/\s*(?:→|｜|>|\||::)\s*/g, '/')
+    .split('/')
+    .map(segment => segment.trim())
+    .filter(Boolean)
+    .join('/');
+}
+
 /**
  * Parses resulting data from a QIDO call into a set of Study MetaData
  *
@@ -47,15 +62,18 @@ function processResults(qidoStudies) {
   qidoStudies.forEach(qidoStudy =>
     studies.push({
       studyInstanceUid: getString(qidoStudy['0020000D']),
+      studyId: getString(qidoStudy['00200010']) || '',
       date: getString(qidoStudy['00080020']), // YYYYMMDD
       time: getString(qidoStudy['00080030']), // HHmmss.SSS (24-hour, minutes, seconds, fractional seconds)
       accession: getString(qidoStudy['00080050']) || '', // short string, probably a number?
       mrn: getString(qidoStudy['00100020']) || '', // medicalRecordNumber
+      sex: getString(qidoStudy['00100040']) || '',
+      age: getString(qidoStudy['00101010']) || '',
       patientName: utils.formatPN(getName(qidoStudy['00100010'])) || '',
       instances: Number(getString(qidoStudy['00201208'])) || 0, // number
       description: getString(qidoStudy['00081030']) || '',
       modalities: getString(getModalities(qidoStudy['00080060'], qidoStudy['00080061'])) || '',
-      accessControlID: getString(qidoStudy['77771027']) || '',
+      categoryPath: normalizeCategoryPath(getString(qidoStudy['77771027']) || ''),
     })
   );
 
@@ -152,7 +170,10 @@ function mapParams(params, options = {}) {
   const commaSeparatedFields = [
     '00081030', // Study Description
     '00080060', // Modality
-    '77771027', // Access Control ID
+    '00200010', // Study ID
+    '00100040', // Patient Sex
+    '00101010', // Patient Age
+    '77771027', // Viewer category path tag
     // Add more fields here if you want them in the result
   ].join(',');
 
@@ -168,6 +189,8 @@ function mapParams(params, options = {}) {
     PatientName: withWildcard(params.patientName),
     //PatientID: withWildcard(params.patientId),
     '00100020': withWildcard(params.patientId), // Temporarily to make the tests pass with dicomweb-server.. Apparently it's broken?
+    PatientSex: withWildcard(params.sex),
+    PatientAge: withWildcard(params.age),
     AccessionNumber: withWildcard(params.accessionNumber),
     StudyDescription: withWildcard(params.studyDescription),
     ModalitiesInStudy: params.modalitiesInStudy,

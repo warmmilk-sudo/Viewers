@@ -1,12 +1,12 @@
 (function () {
   var language = 'zh-CN';
   var translations = {
-    'OHIF Viewer is for investigational use only': 'OHIF Viewer 仅供研究使用',
-    'OHIF Viewer is': 'OHIF Viewer',
+    'OHIF Viewer is for investigational use only': 'Hygea Viewer 仅供研究使用',
+    'OHIF Viewer is': 'Hygea Viewer',
+    'About OHIF Viewer': '关于 Hygea Viewer',
     'for investigational use only': '仅供研究使用',
-    'Learn more about OHIF Viewer': '了解更多 OHIF Viewer 信息',
+    'Learn more about OHIF Viewer': '了解更多 Hygea Viewer 信息',
     'Confirm and hide': '确认并隐藏',
-    Upload: '上传',
     Studies: '检查',
     'Start Date': '开始日期',
     'End Date': '结束日期',
@@ -137,12 +137,45 @@
   }
 })();
 
-window.config = {
+  window.config = {
   routerBasename: '/',
   extensions: [],
   modes: [],
   customizationService: {},
   showStudyList: true,
+  workListClassification: {
+    title: '数据分类',
+    subtitle: '由独立分类树维护，读取 study.categoryPath',
+    collapsedLabel: '分类',
+    valueField: 'categoryPath',
+    defaultValue: '未分类',
+    tree: [
+      {
+        id: 'cryoablation',
+        label: '冷冻消融及随访',
+        value: '冷冻消融及随访',
+        children: [
+          {
+            id: 'cryoablation-pku-people',
+            label: '北大人民医院',
+            value: '冷冻消融及随访/北大人民医院',
+          },
+        ],
+      },
+      {
+        id: 'clinical-trial',
+        label: '临床试验数据',
+        value: '临床试验数据',
+        children: [
+          {
+            id: 'clinical-trial-beijing-hospital',
+            label: '北京医院',
+            value: '临床试验数据/北京医院',
+          },
+        ],
+      },
+    ],
+  },
   maxNumberOfWebWorkers: 3,
   showLoadingIndicator: true,
   investigationalUseDialog: {
@@ -156,7 +189,7 @@ window.config = {
           className: 'text-primary-light text-xl font-semibold',
           style: { letterSpacing: '0.12em' },
         },
-        'Hygea'
+        'Hygea Viewer'
       );
     },
   },
@@ -176,7 +209,6 @@ window.config = {
         enableStudyLazyLoad: true,
         supportsFuzzyMatching: true,
         supportsWildcard: true,
-        dicomUploadEnabled: true,
         omitQuotationForMultipartRequest: true,
       },
     },

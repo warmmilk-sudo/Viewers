@@ -14,6 +14,13 @@ workbox.core.clientsClaim();
 
 // Cache static assets that aren't precached
 workbox.routing.registerRoute(
+  /app-config\.js$/,
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'app-config',
+  })
+);
+
+workbox.routing.registerRoute(
   /\.(?:js|css|json5)$/,
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'static-resources',
@@ -62,7 +69,9 @@ self.addEventListener('message', event => {
   }
 });
 
-workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+workbox.precaching.precacheAndRoute(
+  self.__WB_MANIFEST.filter(entry => !/app-config\.js$/.test(entry.url))
+);
 
 // TODO: Cache API
 // https://developers.google.com/web/fundamentals/instant-and-offline/web-storage/cache-api

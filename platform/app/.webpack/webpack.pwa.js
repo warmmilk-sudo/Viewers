@@ -17,7 +17,7 @@ const PUBLIC_DIR = path.join(__dirname, '../public');
 // ~~ Env Vars
 const HTML_TEMPLATE = process.env.HTML_TEMPLATE || 'index.html';
 const PUBLIC_URL = process.env.PUBLIC_URL || '/';
-const APP_CONFIG = process.env.APP_CONFIG || 'config/default.js';
+const APP_CONFIG = process.env.APP_CONFIG || 'config/local_dcm4chee.js';
 
 // proxy settings
 const PROXY_TARGET = process.env.PROXY_TARGET;
@@ -149,6 +149,8 @@ module.exports = (env, argv) => {
       // http2: true,
       // https: true,
       open,
+      host: '0.0.0.0',
+      allowedHosts: 'all',
       port: OHIF_PORT,
       client: {
         overlay: { errors: true, warnings: false },

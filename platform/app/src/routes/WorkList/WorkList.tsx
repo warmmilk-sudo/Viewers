@@ -16,10 +16,11 @@ import {
   StudyListExpandedRow,
   EmptyStudies,
   StudyListTable,
+  StudyListTableRow,
   StudyListPagination,
-  StudyListFilter,
   Button,
   ButtonEnums,
+  InputFilterText,
 } from '@ohif/ui';
 
 import {
@@ -32,19 +33,298 @@ import {
   useModal,
   useSessionStorage,
   Onboarding,
-  ScrollArea,
   InvestigationalUseDialog,
+  DatePickerWithRange,
 } from '@ohif/ui-next';
 
 import { Types } from '@ohif/ui';
 
 import { preserveQueryParameters, preserveQueryStrings } from '../../utils/preserveQueryParameters';
+import WorkListSidebar from './WorkListSidebar';
+import { getStudyClassificationValues } from './workListClassification';
 
 const PatientInfoVisibility = Types.PatientInfoVisibility;
 
 const { sortBySeriesDate } = utils;
 
 const seriesInStudiesMap = new Map();
+const STUDY_LIST_GRID_WIDTH_CLASSES = {
+  1: 'w-1/24',
+  2: 'w-2/24',
+  3: 'w-3/24',
+  4: 'w-4/24',
+  5: 'w-5/24',
+  6: 'w-6/24',
+  7: 'w-7/24',
+  8: 'w-8/24',
+  9: 'w-9/24',
+  10: 'w-10/24',
+  11: 'w-11/24',
+  12: 'w-12/24',
+  13: 'w-13/24',
+  14: 'w-14/24',
+  15: 'w-15/24',
+  16: 'w-16/24',
+  17: 'w-17/24',
+  18: 'w-18/24',
+  19: 'w-19/24',
+  20: 'w-20/24',
+  21: 'w-21/24',
+  22: 'w-22/24',
+  23: 'w-23/24',
+  24: 'w-24/24',
+};
+
+const OUTER_STUDY_COLUMNS = [
+  { key: 'patientName', label: '患者姓名', gridCol: 4 },
+  { key: 'mrn', label: '病例号', gridCol: 3 },
+  { key: 'studyDate', label: '检查日期', gridCol: 8 },
+  { key: 'sex', label: '性别', gridCol: 2 },
+  { key: 'age', label: '年龄', gridCol: 2 },
+  { key: 'instances', label: '图像数', gridCol: 5 },
+];
+
+const INNER_STUDY_COLUMNS = [
+  { key: 'studyId', label: '检查ID', gridCol: 6 },
+  { key: 'studyDate', label: '检查日期', gridCol: 6 },
+  { key: 'description', label: '描述', gridCol: 5 },
+  { key: 'modality', label: '成像设备', gridCol: 4 },
+  { key: 'instances', label: '图像数', gridCol: 3 },
+];
+
+const SORTABLE_COLUMN_KEYS = new Set(['patientName', 'mrn', 'studyDate', 'sex', 'age']);
+
+function getStudyListGridWidthClass(gridCol) {
+  return STUDY_LIST_GRID_WIDTH_CLASSES[gridCol] || '';
+}
+
+function renderStudyListHeader(columns, { canSort = false, sortBy = '', sortDirection = 'none', onSort } = {}) {
+  return (
+    <div className="flex w-full items-stretch border-b border-white/10 bg-primary-dark/80 text-xs font-medium text-white/65">
+      {columns.map((column, index) => (
+        <div
+          key={column.key}
+          className={classnames(
+            'flex min-w-0 items-center px-4 py-2',
+            getStudyListGridWidthClass(column.gridCol),
+            column.alignRight && 'justify-end text-right',
+            canSort && SORTABLE_COLUMN_KEYS.has(column.key) && 'cursor-pointer select-none'
+          )}
+          onClick={
+            canSort && SORTABLE_COLUMN_KEYS.has(column.key) && onSort
+              ? () => onSort(column.key)
+              : undefined
+          }
+        >
+          {index === 0 && <div className="mr-4 h-4 w-4 shrink-0" />}
+          <span className="truncate">{column.label}</span>
+          {canSort && SORTABLE_COLUMN_KEYS.has(column.key) && (
+            <span className="ml-2 inline-flex shrink-0 text-primary-main">
+              {sortBy === column.key ? (
+                sortDirection === 'ascending' ? (
+                  <Icons.SortingAscending className="w-2" />
+                ) : (
+                  <Icons.SortingDescending className="w-2" />
+                )
+              ) : (
+                <Icons.Sorting className="w-2" />
+              )}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function renderStudyListFilterRow({
+  filterValues,
+  onChange,
+  clearFilters,
+  isFiltering,
+  clearFiltersLabel,
+}) {
+  const handleTextChange = name => value => {
+    onChange({
+      ...filterValues,
+      [name]: value,
+    });
+  };
+
+  const handleDateRangeChange = ({ startDate, endDate }) => {
+    onChange({
+      ...filterValues,
+      studyDate: {
+        startDate: startDate || null,
+        endDate: endDate || null,
+      },
+    });
+  };
+
+  return (
+    <div className="flex w-full items-stretch border-b border-white/10 bg-primary-dark/80 text-white">
+      <div className={classnames('min-w-0 px-4 py-2', getStudyListGridWidthClass(4))}>
+        <InputFilterText
+          className="w-full"
+          placeholder=""
+          value={filterValues.patientName || ''}
+          onChange={handleTextChange('patientName')}
+        />
+      </div>
+      <div className={classnames('min-w-0 px-4 py-2', getStudyListGridWidthClass(3))}>
+        <InputFilterText
+          className="w-full"
+          placeholder=""
+          value={filterValues.mrn || ''}
+          onChange={handleTextChange('mrn')}
+        />
+      </div>
+      <div className={classnames('min-w-0 px-4 py-2', getStudyListGridWidthClass(8))}>
+        <DatePickerWithRange
+          className="w-full"
+          id="studyDate"
+          startDate={filterValues.studyDate?.startDate || ''}
+          endDate={filterValues.studyDate?.endDate || ''}
+          onChange={handleDateRangeChange}
+        />
+      </div>
+      <div className={classnames('min-w-0 px-4 py-2', getStudyListGridWidthClass(2))}>
+        <InputFilterText
+          className="w-full"
+          placeholder=""
+          value={filterValues.sex || ''}
+          onChange={handleTextChange('sex')}
+        />
+      </div>
+      <div className={classnames('min-w-0 px-4 py-2', getStudyListGridWidthClass(2))}>
+        <InputFilterText
+          className="w-full"
+          placeholder=""
+          value={filterValues.age || ''}
+          onChange={handleTextChange('age')}
+        />
+      </div>
+      <div className={classnames('flex min-w-0 items-center px-4 py-2', getStudyListGridWidthClass(5))}>
+        {isFiltering ? (
+          <Button
+            type={ButtonEnums.type.secondary}
+            size={ButtonEnums.size.small}
+            startIcon={<Icons.Cancel />}
+            onClick={clearFilters}
+            className="whitespace-nowrap"
+          >
+            {clearFiltersLabel}
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function normalizeCategoryValues(value) {
+  return Array.isArray(value) ? value.filter(Boolean) : value ? [value].filter(Boolean) : [];
+}
+
+function getStudyInstanceUid(study) {
+  return `${study.studyInstanceUid || ''}`.trim();
+}
+
+function getStudyMrn(study) {
+  return `${study.mrn || ''}`.trim();
+}
+
+function getStudyDateTimestamp(study) {
+  const parsed = moment(study?.date, ['YYYYMMDD', 'YYYY.MM.DD'], true);
+  return parsed.isValid() ? parsed.valueOf() : undefined;
+}
+
+function getStudyDateLabel(study, t) {
+  const studyDate =
+    study?.date &&
+    moment(study.date, ['YYYYMMDD', 'YYYY.MM.DD'], true).isValid() &&
+    moment(study.date, ['YYYYMMDD', 'YYYY.MM.DD']).format(t('Common:localDateFormat', 'MMM-DD-YYYY'));
+  const studyTime =
+    study?.time &&
+    moment(study.time, ['HH', 'HHmm', 'HHmmss', 'HHmmss.SSS']).isValid() &&
+    moment(study.time, ['HH', 'HHmm', 'HHmmss', 'HHmmss.SSS']).format(
+      t('Common:localTimeFormat', 'hh:mm A')
+    );
+
+  return [studyDate, studyTime].filter(Boolean).join(' ');
+}
+
+function getStudyDateRangeLabel(studies, t) {
+  const timestamps = studies
+    .map(study => ({
+      timestamp: getStudyDateTimestamp(study),
+      label: getStudyDateLabel(study, t),
+    }))
+    .filter(item => item.timestamp && item.label)
+    .sort((a, b) => a.timestamp - b.timestamp);
+
+  if (!timestamps.length) {
+    return '';
+  }
+
+  if (timestamps.length === 1) {
+    return timestamps[0].label;
+  }
+
+  return `${timestamps[0].label} - ${timestamps[timestamps.length - 1].label}`;
+}
+
+function getStudyInstancesTotal(studies) {
+  return studies.reduce((total, study) => total + Number(study.instances || 0), 0);
+}
+
+function makeCopyTooltipCell(textValue) {
+  if (!textValue) {
+    return '';
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="cursor-pointer truncate">{textValue}</span>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        <div className="flex items-center justify-between gap-2">
+          {textValue}
+          <Clipboard>{textValue}</Clipboard>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function groupStudiesByMrn(studies) {
+  const groups = [];
+  const groupMap = new Map();
+
+  studies.forEach(study => {
+    const mrn = getStudyMrn(study);
+    const groupKey = mrn ? `mrn:${mrn}` : `study:${getStudyInstanceUid(study)}`;
+    let group = groupMap.get(groupKey);
+
+    if (!group) {
+      group = {
+        key: groupKey,
+        mrn,
+        studies: [],
+      };
+      groupMap.set(groupKey, group);
+      groups.push(group);
+    }
+
+    group.studies.push(study);
+  });
+
+  return groups;
+}
+
+function getStudyGroupStudyKey(groupKey, study) {
+  return `${groupKey}::${getStudyInstanceUid(study)}`;
+}
 
 /**
  * TODO:
@@ -57,10 +337,9 @@ function WorkList({
   dataSource,
   hotkeysManager,
   dataPath,
-  onRefresh,
   servicesManager,
 }: withAppTypes) {
-  const { show, hide } = useModal();
+  const { show } = useModal();
   const { t } = useTranslation();
   // ~ Modes
   const [appConfig] = useAppConfig();
@@ -77,15 +356,23 @@ function WorkList({
     // in the URL, load the page and have it apply.
     clearOnUnload: true,
   });
-  const { accession: _ignoredAccession, accessControlID: _ignoredAccessControlID, ...sanitizedSessionQueryFilterValues } =
+  const { accession: _ignoredAccession, ...sanitizedSessionQueryFilterValues } =
     sessionQueryFilterValues || {};
+  const { description: _ignoredDescription, modalities: _ignoredModalities, ...cleanSessionValues } =
+    sanitizedSessionQueryFilterValues || {};
+  const migratedSessionQueryFilterValues = {
+    ...cleanSessionValues,
+    categoryPath: normalizeCategoryValues(sanitizedSessionQueryFilterValues.categoryPath),
+  };
   const [filterValues, _setFilterValues] = useState({
     ...defaultFilterValues,
-    ...sanitizedSessionQueryFilterValues,
+    ...migratedSessionQueryFilterValues,
   });
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
 
   const debouncedFilterValues = useDebounce(filterValues, 200);
   const { resultsPerPage, pageNumber, sortBy, sortDirection } = filterValues;
+  const sidebarConfig = appConfig.workListClassification ?? appConfig.workListSidebar;
 
   /*
    * The default sort value keep the filters synchronized with runtime conditional sorting
@@ -93,24 +380,22 @@ function WorkList({
    */
 
   const studiesForDisplay = useMemo(() => {
-    const selectedAccessControlIDs = Array.isArray(filterValues.accessControlID)
-      ? filterValues.accessControlID.filter(Boolean)
-      : filterValues.accessControlID
-      ? [filterValues.accessControlID]
-      : [];
+    const selectedCategoryValues = normalizeCategoryValues(filterValues.categoryPath);
 
-    if (!selectedAccessControlIDs.length) {
+    if (!selectedCategoryValues.length) {
       return studies;
     }
 
-    return studies.filter(study => selectedAccessControlIDs.includes(study.accessControlID));
-  }, [studies, filterValues.accessControlID]);
+    const selectedValueSet = new Set(selectedCategoryValues);
+
+    return studies.filter(study =>
+      getStudyClassificationValues(study, sidebarConfig).some(value => selectedValueSet.has(value))
+    );
+  }, [sidebarConfig, studies, filterValues.categoryPath]);
 
   const canSort = studiesForDisplay.length < STUDIES_LIMIT;
   const shouldUseDefaultSort = sortBy === '' || !sortBy;
   const sortModifier = sortDirection === 'descending' ? 1 : -1;
-  const defaultSortValues =
-    shouldUseDefaultSort && canSort ? { sortBy: 'studyDate', sortDirection: 'ascending' } : {};
   const { customizationService } = servicesManager.services;
 
   const sortedStudies = useMemo(() => {
@@ -143,38 +428,61 @@ function WorkList({
     });
   }, [canSort, studiesForDisplay, shouldUseDefaultSort, sortBy, sortModifier]);
 
+  const groupedStudies = useMemo(() => groupStudiesByMrn(sortedStudies), [sortedStudies]);
+  const studiesByRowKey = useMemo(() => {
+    const map = new Map();
+
+    groupedStudies.forEach(group => {
+      group.studies.forEach(study => {
+        map.set(getStudyGroupStudyKey(group.key, study), { group, study });
+      });
+    });
+
+    return map;
+  }, [groupedStudies]);
+
   // ~ Rows & Studies
   const [expandedRows, setExpandedRows] = useState([]);
+  const [expandedStudyRows, setExpandedStudyRows] = useState([]);
   const [studiesWithSeriesData, setStudiesWithSeriesData] = useState([]);
-  const numOfStudies = studiesForDisplay.length;
+  const numOfStudies = groupedStudies.length;
   const querying = useMemo(() => {
-    return isLoadingData || expandedRows.length > 0;
-  }, [isLoadingData, expandedRows]);
+    return isLoadingData || expandedRows.length > 0 || expandedStudyRows.length > 0;
+  }, [isLoadingData, expandedRows, expandedStudyRows]);
 
   const setFilterValues = val => {
-    if (filterValues.pageNumber === val.pageNumber) {
-      val.pageNumber = 1;
+    const nextValues = { ...val };
+    if (filterValues.pageNumber === nextValues.pageNumber) {
+      nextValues.pageNumber = 1;
     }
-    _setFilterValues(val);
-    updateSessionQueryFilterValues(val);
+    _setFilterValues(nextValues);
+    updateSessionQueryFilterValues(nextValues);
     setExpandedRows([]);
+    setExpandedStudyRows([]);
+  };
+
+  const handleSidebarSelection = (categoryValues: string[]) => {
+    setFilterValues({
+      ...filterValues,
+      categoryPath: categoryValues,
+      pageNumber: 1,
+    });
   };
 
   const onPageNumberChange = newPageNumber => {
-    const oldPageNumber = filterValues.pageNumber;
-    const rollingPageNumberMod = Math.floor(101 / filterValues.resultsPerPage);
-    const rollingPageNumber = oldPageNumber % rollingPageNumberMod;
-    const isNextPage = newPageNumber > oldPageNumber;
-    const hasNextPage = Math.max(rollingPageNumber, 1) * resultsPerPage < numOfStudies;
-
-    if (isNextPage && !hasNextPage) {
+    const totalPages = Math.max(1, Math.ceil(numOfStudies / resultsPerPage));
+    if (newPageNumber < 1 || newPageNumber > totalPages) {
       return;
     }
 
+    setExpandedRows([]);
+    setExpandedStudyRows([]);
     setFilterValues({ ...filterValues, pageNumber: newPageNumber });
   };
 
   const onResultsPerPageChange = newResultsPerPage => {
+    setExpandedRows([]);
+    setExpandedStudyRows([]);
     setFilterValues({
       ...filterValues,
       pageNumber: 1,
@@ -209,7 +517,7 @@ function WorkList({
         if (currValue.endDate && defaultValue.endDate !== currValue.endDate) {
           queryString.endDate = currValue.endDate;
         }
-      } else if (key === 'modalities' || key === 'accessControlID') {
+      } else if (key === 'modalities' || key === 'categoryPath') {
         if (Array.isArray(currValue) && currValue.length) {
           queryString[key] = currValue.join(',');
         }
@@ -237,20 +545,21 @@ function WorkList({
       try {
         const series = await dataSource.query.series.search(studyInstanceUid);
         seriesInStudiesMap.set(studyInstanceUid, sortBySeriesDate(series));
-        setStudiesWithSeriesData([...studiesWithSeriesData, studyInstanceUid]);
+        setStudiesWithSeriesData(current =>
+          current.includes(studyInstanceUid) ? current : [...current, studyInstanceUid]
+        );
       } catch (ex) {
         // TODO: UI Notification Service
         console.warn(ex);
       }
     };
 
-    // TODO: WHY WOULD YOU USE AN INDEX OF 1?!
-    // Note: expanded rows index begins at 1
-    for (let z = 0; z < expandedRows.length; z++) {
-      const expandedRowIndex = expandedRows[z] - 1;
-      const studyInstanceUid = sortedStudies[expandedRowIndex].studyInstanceUid;
+    for (let z = 0; z < expandedStudyRows.length; z++) {
+      const rowInfo = studiesByRowKey.get(expandedStudyRows[z]);
+      const study = rowInfo?.study;
+      const studyInstanceUid = getStudyInstanceUid(study);
 
-      if (studiesWithSeriesData.includes(studyInstanceUid)) {
+      if (!studyInstanceUid || studiesWithSeriesData.includes(studyInstanceUid)) {
         continue;
       }
 
@@ -258,7 +567,7 @@ function WorkList({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandedRows, studies]);
+  }, [dataSource, expandedStudyRows, studiesByRowKey, studiesWithSeriesData]);
 
   const isFiltering = (filterValues, defaultFilterValues) => {
     return !isEqual(filterValues, defaultFilterValues);
@@ -268,52 +577,200 @@ function WorkList({
   const rollingPageNumber = (pageNumber - 1) % rollingPageNumberMod;
   const offset = resultsPerPage * rollingPageNumber;
   const offsetAndTake = offset + resultsPerPage;
-  const tableDataSource = sortedStudies.map((study, key) => {
-    const rowKey = key + 1;
+  const tableDataSource = groupedStudies.slice(offset, offsetAndTake).map((group, key) => {
+    const rowKey = offset + key + 1;
     const isExpanded = expandedRows.some(k => k === rowKey);
-    const {
-      studyInstanceUid,
-      modalities,
-      instances,
-      description,
-      mrn,
-      patientName,
-      date,
-      time,
-    } = study;
-    const studyDate =
-      date &&
-      moment(date, ['YYYYMMDD', 'YYYY.MM.DD'], true).isValid() &&
-      moment(date, ['YYYYMMDD', 'YYYY.MM.DD']).format(t('Common:localDateFormat', 'MMM-DD-YYYY'));
-    const studyTime =
-      time &&
-      moment(time, ['HH', 'HHmm', 'HHmmss', 'HHmmss.SSS']).isValid() &&
-      moment(time, ['HH', 'HHmm', 'HHmmss', 'HHmmss.SSS']).format(
-        t('Common:localTimeFormat', 'hh:mm A')
-      );
+    const representativeStudy = group.studies[0] || {};
+    const studyCount = group.studies.length;
+    const patientName = representativeStudy.patientName || '';
+    const mrn = group.mrn || getStudyMrn(representativeStudy);
+    const studyDateLabel = studyCount > 1 ? getStudyDateRangeLabel(group.studies, t) : getStudyDateLabel(representativeStudy, t);
+    const sex = representativeStudy.sex || '';
+    const age = representativeStudy.age || '';
+    const instances = getStudyInstancesTotal(group.studies);
+    const summaryTitle =
+      studyCount > 1
+        ? `${studyCount} 项检查`
+        : `${patientName || ''} ${mrn || ''}`.trim();
 
-    const makeCopyTooltipCell = textValue => {
-      if (!textValue) {
-        return '';
-      }
+    const renderStudyExpandedContent = study => {
+      const studyInstanceUid = getStudyInstanceUid(study);
+      const studyModalities = `${study.modalities || ''}`;
+      const modalitiesToCheck = studyModalities.replaceAll('/', '\\');
+      const studyDate = getStudyDateLabel(study, t);
+
       return (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span className="cursor-pointer truncate">{textValue}</span>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <div className="flex items-center justify-between gap-2">
-              {textValue}
-              <Clipboard>{textValue}</Clipboard>
+        <div
+          key={studyInstanceUid}
+          className="rounded border border-white/10 bg-primary-dark/20"
+        >
+          <div className="flex flex-wrap items-center gap-3 border-b border-white/10 px-4 py-3 text-sm text-white/75">
+            <span className="font-medium text-white">{study.patientName || '(empty)'}</span>
+            <span className="text-white/50">{study.mrn || ''}</span>
+            <span className="text-white/50">{studyDate || ''}</span>
+            <span className="text-white/50">{study.description || '(empty)'}</span>
+            <span className="text-white/50">{studyModalities || ''}</span>
+            <span className="text-white/50">{study.instances || 0}</span>
+          </div>
+          <StudyListExpandedRow
+            seriesTableColumns={{
+              description: t('StudyList:Description'),
+              seriesNumber: t('StudyList:Series'),
+              modality: t('StudyList:Modality'),
+              instances: t('StudyList:Instances'),
+            }}
+            seriesTableDataSource={
+              seriesInStudiesMap.has(studyInstanceUid)
+                ? seriesInStudiesMap.get(studyInstanceUid).map(s => {
+                    return {
+                      description: s.description || '(empty)',
+                      seriesNumber: s.seriesNumber ?? '',
+                      modality: s.modality || '',
+                      instances: s.numSeriesInstances || '',
+                    };
+                  })
+                : []
+            }
+          >
+            <div className="flex flex-row gap-2">
+              {(appConfig.groupEnabledModesFirst
+                ? appConfig.loadedModes.sort((a, b) => {
+                    const isValidA = a.isValidMode({
+                      modalities: modalitiesToCheck,
+                      study,
+                    }).valid;
+                    const isValidB = b.isValidMode({
+                      modalities: modalitiesToCheck,
+                      study,
+                    }).valid;
+
+                    return isValidB - isValidA;
+                  })
+                : appConfig.loadedModes
+              ).map((mode, i) => {
+                if (mode.hide) {
+                  return null;
+                }
+
+                const { valid: isValidMode, description: invalidModeDescription } = mode.isValidMode({
+                  modalities: modalitiesToCheck,
+                  study,
+                });
+
+                if (isValidMode === null) {
+                  return null;
+                }
+
+                const query = new URLSearchParams();
+                if (filterValues.configUrl) {
+                  query.append('configUrl', filterValues.configUrl);
+                }
+                query.append('StudyInstanceUIDs', studyInstanceUid);
+                preserveQueryParameters(query);
+
+                return (
+                  mode.displayName && (
+                    <Link
+                      className={isValidMode ? '' : 'cursor-not-allowed'}
+                      key={i}
+                      to={`${mode.routeName}${dataPath || ''}?${query.toString()}`}
+                      onClick={event => {
+                        if (!isValidMode) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      <Button
+                        type={ButtonEnums.type.primary}
+                        size={ButtonEnums.size.small}
+                        disabled={!isValidMode}
+                        startIconTooltip={
+                          !isValidMode ? (
+                            <div className="font-inter flex w-[206px] whitespace-normal text-left text-xs font-normal text-white">
+                              {invalidModeDescription}
+                            </div>
+                          ) : null
+                        }
+                        startIcon={
+                          isValidMode ? (
+                            <Icons.LaunchArrow className="!h-[20px] !w-[20px] text-black" />
+                          ) : (
+                            <Icons.LaunchInfo className="!h-[20px] !w-[20px] text-black" />
+                          )
+                        }
+                        onClick={() => {}}
+                        dataCY={`mode-${mode.routeName}-${studyInstanceUid}`}
+                        className={isValidMode ? undefined : 'bg-[#222d44]'}
+                      >
+                        {mode.displayName}
+                      </Button>
+                    </Link>
+                  )
+                );
+              })}
             </div>
-          </TooltipContent>
-        </Tooltip>
+          </StudyListExpandedRow>
+        </div>
       );
     };
 
+    const buildStudyRowData = study => {
+      const studyInstanceUid = getStudyInstanceUid(study);
+      const studyRowKey = getStudyGroupStudyKey(group.key, study);
+      const isStudyExpanded = expandedStudyRows.includes(studyRowKey);
+      const studyIdentifier = study.studyId || study.accession || '(empty)';
+      const studyDate = getStudyDateLabel(study, t);
+      const studyDescription = study.description || '(empty)';
+      const studyModality = study.modalities || '';
+      const studyInstances = Number(study.instances || 0);
+
+      return {
+        dataCY: `studyRow-${studyRowKey}`,
+        clickableCY: studyRowKey,
+        row: [
+          {
+            key: 'studyId',
+            content: makeCopyTooltipCell(studyIdentifier),
+            title: studyIdentifier,
+            gridCol: 6,
+          },
+          {
+            key: 'studyDate',
+            content: studyDate,
+            title: studyDate,
+            gridCol: 6,
+          },
+          {
+            key: 'description',
+            content: makeCopyTooltipCell(studyDescription),
+            title: studyDescription,
+            gridCol: 5,
+          },
+          {
+            key: 'modality',
+            content: makeCopyTooltipCell(studyModality),
+            title: studyModality,
+            gridCol: 4,
+          },
+          {
+            key: 'instances',
+            content: studyInstances,
+            title: `${studyInstances}`,
+            gridCol: 3,
+          },
+        ],
+        expandedContent: renderStudyExpandedContent(study),
+        onClickRow: () =>
+          setExpandedStudyRows(current =>
+            isStudyExpanded ? current.filter(k => k !== studyRowKey) : [...current, studyRowKey]
+          ),
+        isExpanded: isStudyExpanded,
+      };
+    };
+
     return {
-      dataCY: `studyRow-${studyInstanceUid}`,
-      clickableCY: studyInstanceUid,
+      dataCY: `studyGroup-${group.key}`,
+      clickableCY: group.key,
       row: [
         {
           key: 'patientName',
@@ -329,23 +786,25 @@ function WorkList({
           key: 'studyDate',
           content: (
             <>
-              {studyDate && <span className="mr-4">{studyDate}</span>}
-              {studyTime && <span>{studyTime}</span>}
+              {(studyDateLabel || summaryTitle) && (
+                <span className="mr-4">{studyDateLabel || summaryTitle}</span>
+              )}
             </>
           ),
-          title: `${studyDate || ''} ${studyTime || ''}`,
-          gridCol: 5,
+          title: studyDateLabel || summaryTitle,
+          gridCol: 8,
         },
         {
-          key: 'description',
-          content: makeCopyTooltipCell(description),
-          gridCol: 4,
+          key: 'sex',
+          content: makeCopyTooltipCell(sex),
+          title: sex,
+          gridCol: 2,
         },
         {
-          key: 'modality',
-          content: modalities,
-          title: modalities,
-          gridCol: 3,
+          key: 'age',
+          content: makeCopyTooltipCell(age),
+          title: age,
+          gridCol: 2,
         },
         {
           key: 'instances',
@@ -360,126 +819,27 @@ function WorkList({
               {instances}
             </>
           ),
-          title: (instances || 0).toString(),
-          gridCol: 2,
+          title: instances.toString(),
+          gridCol: 5,
         },
       ],
-      // Todo: This is actually running for all rows, even if they are
-      // not clicked on.
       expandedContent: (
-        <StudyListExpandedRow
-          seriesTableColumns={{
-            description: t('StudyList:Description'),
-            seriesNumber: t('StudyList:Series'),
-            modality: t('StudyList:Modality'),
-            instances: t('StudyList:Instances'),
-          }}
-          seriesTableDataSource={
-            seriesInStudiesMap.has(studyInstanceUid)
-              ? seriesInStudiesMap.get(studyInstanceUid).map(s => {
-                  return {
-                    description: s.description || '(empty)',
-                    seriesNumber: s.seriesNumber ?? '',
-                    modality: s.modality || '',
-                    instances: s.numSeriesInstances || '',
-                  };
-                })
-              : []
-          }
-        >
-          <div className="flex flex-row gap-2">
-            {(appConfig.groupEnabledModesFirst
-              ? appConfig.loadedModes.sort((a, b) => {
-                  const isValidA = a.isValidMode({
-                    modalities: modalities.replaceAll('/', '\\'),
-                    study,
-                  }).valid;
-                  const isValidB = b.isValidMode({
-                    modalities: modalities.replaceAll('/', '\\'),
-                    study,
-                  }).valid;
-
-                  return isValidB - isValidA;
-                })
-              : appConfig.loadedModes
-            ).map((mode, i) => {
-              if (mode.hide) {
-                // Hide this mode from display
-                return null;
-              }
-              const modalitiesToCheck = modalities.replaceAll('/', '\\');
-
-              const { valid: isValidMode, description: invalidModeDescription } = mode.isValidMode({
-                modalities: modalitiesToCheck,
-                study,
-              });
-              if (isValidMode === null) {
-                // Hide this as a computed result.
-                return null;
-              }
-
-              // TODO: Modes need a default/target route? We mostly support a single one for now.
-              // We should also be using the route path, but currently are not
-              // mode.routeName
-              // mode.routes[x].path
-              // Don't specify default data source, and it should just be picked up... (this may not currently be the case)
-              // How do we know which params to pass? Today, it's just StudyInstanceUIDs and configUrl if exists
-              const query = new URLSearchParams();
-              if (filterValues.configUrl) {
-                query.append('configUrl', filterValues.configUrl);
-              }
-              query.append('StudyInstanceUIDs', studyInstanceUid);
-              preserveQueryParameters(query);
-
-              return (
-                mode.displayName && (
-                  <Link
-                    className={isValidMode ? '' : 'cursor-not-allowed'}
-                    key={i}
-                    to={`${mode.routeName}${dataPath || ''}?${query.toString()}`}
-                    onClick={event => {
-                      // In case any event bubbles up for an invalid mode, prevent the navigation.
-                      // For example, the event bubbles up when the icon embedded in the disabled button is clicked.
-                      if (!isValidMode) {
-                        event.preventDefault();
-                      }
-                    }}
-                    // to={`${mode.routeName}/dicomweb?StudyInstanceUIDs=${studyInstanceUid}`}
-                  >
-                    {/* TODO revisit the completely rounded style of buttons used for launching a mode from the worklist later */}
-                    <Button
-                      type={ButtonEnums.type.primary}
-                      size={ButtonEnums.size.small}
-                      disabled={!isValidMode}
-                      startIconTooltip={
-                        !isValidMode ? (
-                          <div className="font-inter flex w-[206px] whitespace-normal text-left text-xs font-normal text-white">
-                            {invalidModeDescription}
-                          </div>
-                        ) : null
-                      }
-                      startIcon={
-                        isValidMode ? (
-                          <Icons.LaunchArrow className="!h-[20px] !w-[20px] text-black" />
-                        ) : (
-                          <Icons.LaunchInfo className="!h-[20px] !w-[20px] text-black" />
-                        )
-                      }
-                      onClick={() => {}}
-                      dataCY={`mode-${mode.routeName}-${studyInstanceUid}`}
-                      className={isValidMode ? undefined : 'bg-[#222d44]'}
-                    >
-                      {mode.displayName}
-                    </Button>
-                  </Link>
-                )
-              );
-            })}
-          </div>
-        </StudyListExpandedRow>
+        <div className="bg-black px-3 pb-3 pt-0">
+          {renderStudyListHeader(INNER_STUDY_COLUMNS)}
+          <table className="w-full border-collapse text-white">
+            <tbody data-cy={`studyList-${group.key}`}>
+              {group.studies.map(study => (
+                <StudyListTableRow
+                  key={getStudyGroupStudyKey(group.key, study)}
+                  tableData={buildStudyRowData(study)}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       ),
       onClickRow: () =>
-        setExpandedRows(s => (isExpanded ? s.filter(n => rowKey !== n) : [...s, rowKey])),
+        setExpandedRows(current => (isExpanded ? current.filter(n => rowKey !== n) : [...current, rowKey])),
       isExpanded,
     };
   });
@@ -530,41 +890,43 @@ function WorkList({
   const LoadingIndicatorProgress = customizationService.getCustomization(
     'ui.loadingIndicatorProgress'
   );
-  const DicomUploadComponent = customizationService.getCustomization('dicomUploadComponent');
+  const effectiveSortBy = sortBy || (canSort ? 'studyDate' : '');
+  const effectiveSortDirection = sortDirection || (canSort ? 'ascending' : 'none');
+  const headerContent = (
+    <div className="bg-black">
+      {renderStudyListHeader(OUTER_STUDY_COLUMNS, {
+        canSort,
+        sortBy: effectiveSortBy,
+        sortDirection: effectiveSortDirection,
+        onSort: columnKey => {
+          let nextSortDirection = 'descending';
+          if (sortBy === columnKey) {
+            if (sortDirection === 'ascending') {
+              nextSortDirection = 'descending';
+            } else if (sortDirection === 'descending') {
+              nextSortDirection = 'ascending';
+            }
+          }
 
-  const uploadProps =
-    DicomUploadComponent && dataSource.getConfig()?.dicomUploadEnabled
-      ? {
-          title: 'Upload files',
-          containerClassName: DicomUploadComponent?.containerClassName,
-          closeButton: true,
-          shouldCloseOnEsc: false,
-          shouldCloseOnOverlayClick: false,
-          content: () => (
-            <DicomUploadComponent
-              dataSource={dataSource}
-              onComplete={() => {
-                hide();
-                onRefresh();
-              }}
-              onStarted={() => {
-                show({
-                  ...uploadProps,
-                  // when upload starts, hide the default close button as closing the dialogue must be handled by the upload dialogue itself
-                  closeButton: false,
-                });
-              }}
-            />
-          ),
-        }
-      : undefined;
-
-  const dataSourceConfigurationComponent = customizationService.getCustomization(
-    'ohif.dataSourceConfigurationComponent'
+          setFilterValues({
+            ...filterValues,
+            sortBy: nextSortDirection ? columnKey : '',
+            sortDirection: nextSortDirection,
+          });
+        },
+      })}
+      {renderStudyListFilterRow({
+        filterValues,
+        onChange: setFilterValues,
+        clearFilters: () => setFilterValues(defaultFilterValues),
+        isFiltering: isFiltering(filterValues, defaultFilterValues),
+        clearFiltersLabel: t('ClearFilters'),
+      })}
+    </div>
   );
 
   return (
-    <div className="flex h-screen flex-col bg-black">
+    <div className="flex h-screen flex-col bg-black text-white">
       <Header
         isSticky
         menuOptions={menuOptions}
@@ -574,33 +936,28 @@ function WorkList({
       />
       <Onboarding />
       <InvestigationalUseDialog dialogConfiguration={appConfig?.investigationalUseDialog} />
-      <div className="flex h-full flex-col overflow-y-auto">
-        <ScrollArea>
-          <div className="flex grow flex-col">
-            <StudyListFilter
-              numOfStudies={pageNumber * resultsPerPage > 100 ? 101 : numOfStudies}
-              filtersMeta={filtersMeta}
-              filterValues={{ ...filterValues, ...defaultSortValues }}
-              onChange={setFilterValues}
-              clearFilters={() => setFilterValues(defaultFilterValues)}
-              isFiltering={isFiltering(filterValues, defaultFilterValues)}
-              onUploadClick={uploadProps ? () => show(uploadProps) : undefined}
-              getDataSourceConfigurationComponent={
-                dataSourceConfigurationComponent
-                  ? () => dataSourceConfigurationComponent()
-                  : undefined
-              }
-            />
-          </div>
+      <div className="flex min-h-0 flex-1 overflow-hidden bg-black">
+        <WorkListSidebar
+          studies={studies}
+          sidebarConfig={sidebarConfig}
+          activeCategoryValues={normalizeCategoryValues(filterValues.categoryPath)}
+          onSelectCategoryValues={handleSidebarSelection}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapsed={() => setIsSidebarCollapsed(value => !value)}
+        />
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {hasStudies ? (
-            <div className="flex grow flex-col">
-              <StudyListTable
-                tableDataSource={tableDataSource.slice(offset, offsetAndTake)}
-                numOfStudies={numOfStudies}
-                querying={querying}
-                filtersMeta={filtersMeta}
-              />
-              <div className="grow">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+              <div className="min-h-0 flex-1 overflow-auto px-6 pb-4 pt-0">
+                <StudyListTable
+                  tableDataSource={tableDataSource}
+                  numOfStudies={numOfStudies}
+                  querying={querying}
+                  filtersMeta={filtersMeta}
+                  headerContent={headerContent}
+                />
+              </div>
+              <div className="shrink-0 border-t border-white/10 bg-black px-4">
                 <StudyListPagination
                   onChangePage={onPageNumberChange}
                   onChangePerPage={onResultsPerPageChange}
@@ -610,7 +967,7 @@ function WorkList({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center pt-48">
+            <div className="flex flex-1 flex-col items-center justify-center px-6">
               {appConfig.showLoadingIndicator && isLoadingData ? (
                 <LoadingIndicatorProgress className={'h-full w-full bg-black'} />
               ) : (
@@ -618,7 +975,7 @@ function WorkList({
               )}
             </div>
           )}
-        </ScrollArea>
+        </div>
       </div>
     </div>
   );
@@ -641,9 +998,9 @@ const defaultFilterValues = {
     startDate: null,
     endDate: null,
   },
-  description: '',
-  modalities: [],
-  accessControlID: [],
+  sex: '',
+  age: '',
+  categoryPath: [],
   sortBy: '',
   sortDirection: 'none',
   pageNumber: 1,
@@ -675,9 +1032,9 @@ function _getQueryFilterValues(params) {
       startDate: params.get('startdate') || null,
       endDate: params.get('enddate') || null,
     },
-    description: params.get('description'),
-    modalities: params.get('modalities') ? params.get('modalities').split(',') : [],
-    accessControlID: params.get('accesscontrolid') ? params.get('accesscontrolid').split(',') : [],
+    sex: params.get('sex'),
+    age: params.get('age'),
+    categoryPath: params.get('categorypath') ? params.get('categorypath').split(',') : [],
     sortBy: params.get('sortby'),
     sortDirection: params.get('sortdirection'),
     pageNumber: _tryParseInt(params.get('pagenumber'), undefined),

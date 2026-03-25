@@ -264,6 +264,8 @@ function _getQueryFilterValues(query, queryLimit) {
     patientName: query.get('patientname'),
     studyDescription: query.get('description'),
     modalitiesInStudy: query.get('modalities') && query.get('modalities').split(','),
+    sex: query.get('sex'),
+    age: query.get('age'),
     accessionNumber: query.get('accession'),
     //
     startDate: query.get('startdate'),
@@ -282,6 +284,7 @@ function _getQueryFilterValues(query, queryLimit) {
   // patientName: good
   // studyDescription: good
   // accessionNumber: good
+  // sex / age: good
 
   // Delete null/undefined keys
   Object.keys(queryFilterValues).forEach(
