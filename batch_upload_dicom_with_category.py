@@ -566,6 +566,30 @@ def ensure_root_is_valid(root: Path) -> None:
         raise NotADirectoryError(f"Not a directory: {root}")
 
 
+def merge_worker_summaries(summary_a: WorkerSummary, summary_b: WorkerSummary) -> WorkerSummary:
+    return WorkerSummary(
+        series_dir=summary_a.series_dir,
+        study_groups=summary_a.study_groups + summary_b.study_groups,
+        files=summary_a.files + summary_b.files,
+        existing_files=summary_a.existing_files + summary_b.existing_files,
+        stored_files=summary_a.stored_files + summary_b.stored_files,
+        skipped_files=summary_a.skipped_files + summary_b.skipped_files,
+        failed_files=summary_a.failed_files + summary_b.failed_files,
+    )
+
+
+def create_empty_summary(root: Path) -> WorkerSummary:
+    return WorkerSummary(
+        series_dir=root,
+        study_groups=0,
+        files=0,
+        existing_files=0,
+        stored_files=0,
+        skipped_files=0,
+        failed_files=0,
+    )
+
+
 def main() -> int:
     args = parse_args()
     logger = setup_logging(args.log_file)
@@ -587,54 +611,73 @@ def main() -> int:
         )
         category_rules = load_category_rules(args.category_map)
 
-        if args.staging_root is None:
-            temp_dir = tempfile.TemporaryDirectory(prefix="hygea_dicom_stage_")
-            staging_context = temp_dir
-            stage_root = Path(temp_dir.name) / args.root.name
-        else:
-            staging_context = nullcontext()
-            stage_root = args.staging_root / args.root.name
-            if stage_root.exists() and any(stage_root.iterdir()):
-                raise FileExistsError(f"Staging destination already exists and is not empty: {stage_root}")
-            stage_root.parent.mkdir(parents=True, exist_ok=True)
+        source_study_dirs = iter_study_dirs(args.root)
+        logger.info("[PLAN] source=%s top-level study dir(s)=%s", args.root, len(source_study_dirs))
 
-        with staging_context:
-            logger.info("[STAGE] source=%s staging=%s", args.root, stage_root)
-            staged_files, categorized_files = stage_source_tree(
-                args.root,
-                stage_root,
-                category_rules,
-                default_category_path,
-                args.private_creator,
-                logger=logger,
-            )
-            logger.info(
-                "[STAGE] prepared %s file(s), viewer classification will be synced via dcm4chee",
-                staged_files,
-            )
+        summary = create_empty_summary(args.root)
 
-            upload_args = argparse.Namespace(**vars(args))
-            upload_args.root = stage_root
-            upload_args.viewer_auth_header = viewer_auth_header
-            upload_args.viewer_extra_headers = viewer_extra_headers
+        for source_study_dir in source_study_dirs:
+            if args.staging_root is None:
+                temp_dir = tempfile.TemporaryDirectory(prefix="hygea_dicom_stage_")
+                staging_context = temp_dir
+                stage_root = Path(temp_dir.name) / source_study_dir.name
+            else:
+                stage_root = args.staging_root / source_study_dir.name
+                if stage_root.exists():
+                    if not stage_root.is_dir():
+                        raise NotADirectoryError(f"Staging destination is not a directory: {stage_root}")
+                    if any(stage_root.iterdir()):
+                        raise FileExistsError(
+                            f"Staging destination already exists and is not empty: {stage_root}"
+                        )
+                else:
+                    stage_root.parent.mkdir(parents=True, exist_ok=True)
+                staging_context = nullcontext()
 
-            summary = upload_staged_root(
-                stage_root,
-                upload_args,
-                logger,
-                category_rules=category_rules,
-                default_category_path=default_category_path,
-            )
-            logger.info(
-                "[DONE] study groups=%s files=%s existing=%s stored=%s skipped=%s failed=%s",
-                summary.study_groups,
-                summary.files,
-                summary.existing_files,
-                summary.stored_files,
-                summary.skipped_files,
-                summary.failed_files,
-            )
+            with staging_context:
+                logger.info("[STAGE] source=%s staging=%s", source_study_dir, stage_root)
+                staged_files, categorized_files = stage_source_tree(
+                    source_study_dir,
+                    stage_root,
+                    category_rules,
+                    default_category_path,
+                    args.private_creator,
+                    logger=logger,
+                )
+                logger.info(
+                    "[STAGE] source=%s prepared %s file(s), categorized=%s",
+                    source_study_dir.name,
+                    staged_files,
+                    categorized_files,
+                )
 
+                upload_args = argparse.Namespace(**vars(args))
+                upload_args.root = stage_root
+                upload_args.viewer_auth_header = viewer_auth_header
+                upload_args.viewer_extra_headers = viewer_extra_headers
+
+                stage_summary = upload_staged_root(
+                    stage_root,
+                    upload_args,
+                    logger,
+                    category_rules=category_rules,
+                    default_category_path=default_category_path,
+                )
+                summary = merge_worker_summaries(summary, stage_summary)
+
+            if args.staging_root is not None and stage_root.exists():
+                shutil.rmtree(stage_root, ignore_errors=True)
+            logger.info("[RELEASE] cleared staging for %s", source_study_dir.name)
+
+        logger.info(
+            "[DONE] study groups=%s files=%s existing=%s stored=%s skipped=%s failed=%s",
+            summary.study_groups,
+            summary.files,
+            summary.existing_files,
+            summary.stored_files,
+            summary.skipped_files,
+            summary.failed_files,
+        )
         return 0
     except Exception as exc:
         logger.exception("Fatal error while preparing batch upload: %s", exc)

@@ -939,6 +939,7 @@ function WorkList({
       <div className="flex min-h-0 flex-1 overflow-hidden bg-black">
         <WorkListSidebar
           studies={studies}
+          dataSource={dataSource}
           sidebarConfig={sidebarConfig}
           activeCategoryValues={normalizeCategoryValues(filterValues.categoryPath)}
           onSelectCategoryValues={handleSidebarSelection}

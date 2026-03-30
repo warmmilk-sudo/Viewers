@@ -41,13 +41,11 @@ function DataSourceWrapper(props: withAppTypes) {
   // studies.processResults --> <LayoutTemplate studies={} />
   // But only for LayoutTemplate type of 'list'?
   // Or no data fetching here, and just hand down my source
-  const STUDIES_LIMIT = 101;
+  const STUDIES_BATCH_LIMIT = 500;
   const DEFAULT_DATA = {
     studies: [],
     total: 0,
-    resultsPerPage: 25,
-    pageNumber: 1,
-    location: 'Not a valid location, causes first load to occur',
+    querySignature: 'Not a valid query signature, causes first load to occur',
   };
 
   const getInitialDataSourceName = useCallback(() => {
@@ -145,20 +143,19 @@ function DataSourceWrapper(props: withAppTypes) {
       return;
     }
 
-    const queryFilterValues = _getQueryFilterValues(location.search, STUDIES_LIMIT);
+    const queryFilterValues = _getQueryFilterValues(location.search);
+    const querySignature = _getQuerySignature(queryFilterValues);
 
     // 204: no content
     async function getData() {
       setIsLoading(true);
       log.time(Enums.TimingEnum.SEARCH_TO_LIST);
-      const studies = await dataSource.query.studies.search(queryFilterValues);
+      const studies = await _fetchAllStudies(dataSource, queryFilterValues, STUDIES_BATCH_LIMIT);
 
       setData({
         studies: studies || [],
         total: studies.length,
-        resultsPerPage: queryFilterValues.resultsPerPage,
-        pageNumber: queryFilterValues.pageNumber,
-        location,
+        querySignature,
       });
       log.timeEnd(Enums.TimingEnum.SCRIPT_TO_VIEW);
       log.timeEnd(Enums.TimingEnum.SEARCH_TO_LIST);
@@ -167,24 +164,9 @@ function DataSourceWrapper(props: withAppTypes) {
     }
 
     try {
-      // Cache invalidation :thinking:
-      // - Anytime change is not just next/previous page
-      // - And we didn't cross a result offset range
-      const isSamePage = data.pageNumber === queryFilterValues.pageNumber;
-      const previousOffset =
-        Math.floor((data.pageNumber * data.resultsPerPage) / STUDIES_LIMIT) * (STUDIES_LIMIT - 1);
-      const newOffset =
-        Math.floor(
-          (queryFilterValues.pageNumber * queryFilterValues.resultsPerPage) / STUDIES_LIMIT
-        ) *
-        (STUDIES_LIMIT - 1);
-      // Simply checking data.location !== location is not sufficient because even though the location href (i.e. entire URL)
-      // has not changed, the React Router still provides a new location reference and would result in two study queries
-      // on initial load. Alternatively, window.location.href could be used.
-      const isLocationUpdated =
-        typeof data.location === 'string' || !areLocationsTheSame(data.location, location);
-      const isDataInvalid =
-        !isSamePage || (!isLoading && (newOffset !== previousOffset || isLocationUpdated));
+      const isQueryUpdated =
+        typeof data.querySignature === 'string' && data.querySignature !== querySignature;
+      const isDataInvalid = !isLoading && isQueryUpdated;
 
       if (isDataInvalid) {
         getData().catch(e => {
@@ -217,7 +199,7 @@ function DataSourceWrapper(props: withAppTypes) {
       console.warn(ex);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, location, params, isLoading, setIsLoading, dataSource, isDataSourceInitialized]);
+  }, [data, location.search, params, isLoading, setIsLoading, dataSource, isDataSourceInitialized]);
   // queryFilterValues
 
   // TODO: Better way to pass DataSource?
@@ -247,16 +229,13 @@ export default DataSourceWrapper;
  * Need generic that can be shared? Isn't this what qs is for?
  * @param {*} query
  */
-function _getQueryFilterValues(query, queryLimit) {
+function _getQueryFilterValues(query) {
   query = new URLSearchParams(query);
   const newParams = new URLSearchParams();
   for (const [key, value] of query) {
     newParams.set(key.toLowerCase(), value);
   }
   query = newParams;
-
-  const pageNumber = _tryParseInt(query.get('pagenumber'), 1);
-  const resultsPerPage = _tryParseInt(query.get('resultsperpage'), 25);
 
   const queryFilterValues = {
     // DCM
@@ -271,13 +250,7 @@ function _getQueryFilterValues(query, queryLimit) {
     startDate: query.get('startdate'),
     endDate: query.get('enddate'),
     page: _tryParseInt(query.get('page'), undefined),
-    pageNumber,
-    resultsPerPage,
     // Rarely supported server-side
-    sortBy: query.get('sortby'),
-    sortDirection: query.get('sortdirection'),
-    // Offset...
-    offset: Math.floor((pageNumber * resultsPerPage) / queryLimit) * (queryLimit - 1),
     config: query.get('configurl'),
   };
 
@@ -304,4 +277,47 @@ function _getQueryFilterValues(query, queryLimit) {
     }
     return retValue;
   }
+}
+
+async function _fetchAllStudies(dataSource, baseQuery, batchLimit) {
+  const allStudies = [];
+  const seenStudyInstanceUids = new Set();
+  let offset = 0;
+  let rounds = 0;
+  const maxRounds = 200;
+
+  while (rounds < maxRounds) {
+    const batch = await dataSource.query.studies.search({
+      ...baseQuery,
+      limit: batchLimit,
+      offset,
+    });
+
+    if (!batch?.length) {
+      break;
+    }
+
+    batch.forEach(study => {
+      const studyInstanceUid = `${study?.studyInstanceUid || ''}`.trim();
+      const dedupeKey = studyInstanceUid || `fallback:${allStudies.length}`;
+
+      if (!seenStudyInstanceUids.has(dedupeKey)) {
+        seenStudyInstanceUids.add(dedupeKey);
+        allStudies.push(study);
+      }
+    });
+
+    if (batch.length < batchLimit) {
+      break;
+    }
+
+    offset += batchLimit;
+    rounds += 1;
+  }
+
+  return allStudies;
+}
+
+function _getQuerySignature(queryFilterValues) {
+  return JSON.stringify(queryFilterValues);
 }

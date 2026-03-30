@@ -12,6 +12,13 @@ import {
 
 type WorkListSidebarProps = {
   studies: ClassificationStudy[];
+  dataSource?: {
+    query?: {
+      studies?: {
+        search?: (query: Record<string, unknown>) => Promise<ClassificationStudy[]>;
+      };
+    };
+  };
   activeCategoryValues: string[];
   onSelectCategoryValues: (values: string[]) => void;
   isCollapsed: boolean;
@@ -21,15 +28,66 @@ type WorkListSidebarProps = {
 
 function WorkListSidebar({
   studies,
+  dataSource,
   activeCategoryValues,
   onSelectCategoryValues,
   isCollapsed,
   onToggleCollapsed,
   sidebarConfig,
 }: WorkListSidebarProps) {
+  const [catalogStudies, setCatalogStudies] = useState<ClassificationStudy[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchCatalogStudies = async () => {
+      const search = dataSource?.query?.studies?.search;
+
+      if (!search) {
+        setCatalogStudies([]);
+        return;
+      }
+
+      try {
+        const results = await search({
+          limit: 10000,
+          offset: 0,
+        });
+
+        if (!cancelled) {
+          setCatalogStudies(Array.isArray(results) ? results : []);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setCatalogStudies([]);
+        }
+        console.warn('[WorkListSidebar] failed to load category catalog studies:', error);
+      }
+    };
+
+    fetchCatalogStudies();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dataSource]);
+
+  const classificationStudies = useMemo(() => {
+    const merged = new Map<string, ClassificationStudy>();
+
+    for (const study of [...catalogStudies, ...studies]) {
+      const key = getStudyPatientKey(study) + '::' + getStudyInstanceUid(study);
+      if (!merged.has(key)) {
+        merged.set(key, study);
+      }
+    }
+
+    return Array.from(merged.values());
+  }, [catalogStudies, studies]);
+
   const treeItems = useMemo(() => {
-    return buildDisplayClassificationTree(studies, sidebarConfig);
-  }, [sidebarConfig, studies]);
+    return buildDisplayClassificationTree(classificationStudies, sidebarConfig);
+  }, [classificationStudies, sidebarConfig]);
 
   const activeValueSet = useMemo(
     () => new Set(activeCategoryValues.filter(Boolean)),
@@ -58,7 +116,7 @@ function WorkListSidebar({
       const valueSet = new Set(node.values);
       const patientKeys = new Set<string>();
 
-      studies.forEach(study => {
+      classificationStudies.forEach(study => {
         const studyValues = getStudyClassificationValues(study, sidebarConfig);
         if (studyValues.some(value => valueSet.has(value))) {
           patientKeys.add(getStudyPatientKey(study));
@@ -72,7 +130,7 @@ function WorkListSidebar({
     treeItems.forEach(countNode);
 
     return counts;
-  }, [sidebarConfig, studies, treeItems]);
+  }, [classificationStudies, sidebarConfig, treeItems]);
 
   const handleNodeSelection = (node: WorkListClassificationNode) => {
     onSelectCategoryValues(node.values);
@@ -268,6 +326,10 @@ function getStudyPatientKey(study: ClassificationStudy) {
   }
 
   return 'unknown';
+}
+
+function getStudyInstanceUid(study: ClassificationStudy) {
+  return `${study.studyInstanceUid ?? ''}`.trim();
 }
 
 function hasActiveValue(node: WorkListClassificationNode, activeValueSet: Set<string>) {
