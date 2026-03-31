@@ -573,9 +573,7 @@ function WorkList({
     return !isEqual(filterValues, defaultFilterValues);
   };
 
-  const rollingPageNumberMod = Math.floor(101 / resultsPerPage);
-  const rollingPageNumber = (pageNumber - 1) % rollingPageNumberMod;
-  const offset = resultsPerPage * rollingPageNumber;
+  const offset = Math.max(0, (pageNumber - 1) * resultsPerPage);
   const offsetAndTake = offset + resultsPerPage;
   const tableDataSource = groupedStudies.slice(offset, offsetAndTake).map((group, key) => {
     const rowKey = offset + key + 1;

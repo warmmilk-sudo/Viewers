@@ -63,3 +63,5 @@ tests/playwright-report/
 
 # Backup files
 *~
+*.log
+__pycache__/
